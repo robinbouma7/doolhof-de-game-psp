@@ -17,6 +17,7 @@ int exit_callback(int arg1, int arg2, void *common) {
     return 0;
 }
 
+
 int callbackthread(SceSize args, void *argp) {
     int cbid = sceKernelCreateCallback("Exit Callback", exit_callback, NULL);
     sceKernelRegisterExitCallback(cbid);
