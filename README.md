@@ -5,11 +5,8 @@ bouw instructies:
 
 als je het wil bouwen: 
 
-sorry. erg moeilijk en ik heb geen zin om het helemaal uit te typen.
+1. instaleer pspsdk (https://darksectordds.github.io/html/MinimalistPSPSDK/index.html)
 
+2. run compile.bat
 
-als je het toch wel wil bouwen:
-
-1. waarom?
-
-2. succes er mee!
+3. als het niet werkt moet er waarschijnlijk nog wat gedaan worden maar ik weet niet wat.
