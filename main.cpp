@@ -40,6 +40,10 @@ int drawwalls() {
     return 0;
 }
 
+int collision() {
+    //coming soon
+}
+
 auto main() -> int {
     
     setupcallbacks();
