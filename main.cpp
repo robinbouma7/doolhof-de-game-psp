@@ -34,6 +34,13 @@ void setupcallbacks () {
     }
 }
 
+int drawwalls() {
+    //muren worden hier getekend
+
+    GFX::drawRect(100, 60, 25, 30, 0xFFFFFFFF);
+    return 0;
+}
+
 auto main() -> int {
     
     setupcallbacks();
@@ -80,64 +87,70 @@ auto main() -> int {
 
     SceCtrlData ctrldata;
 
-    int x = 5, y = 5;
+    int x = 50, y = 50;
 
-    while(true) {
+    while(1) {
         
 
         sceCtrlReadBufferPositive(&ctrldata, 1);
-        GFX::clear(0xFF000000);
+        //GFX::swapBuffers();
+        //sceDisplayWaitVblankStart();
 
-        GFX::swapBuffers();
-        sceDisplayWaitVblankStart();
-
-        if (ctrldata.Buttons & PSP_CTRL_UP) {
+        if (ctrldata.Buttons & PSP_CTRL_UP && y > 0) {
             //pspDebugScreenPrintf("up is pressed \n");
             y = y - 5;
+            GFX::clear(0xFF000000);
+            drawwalls();
             GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart();
-            
 
-            
-            
+            GFX::swapBuffers();
+            sceDisplayWaitVblankStart();            
         }
-        if (ctrldata.Buttons & PSP_CTRL_DOWN) {
+
+        else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 245) {
             //pspDebugScreenPrintf("down is pressed \n");
             y = y + 5;
+            GFX::clear(0xFF000000);
+            drawwalls();
             GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
             GFX::swapBuffers();
             sceDisplayWaitVblankStart();
-            
-
-            
-            
         }
-        if (ctrldata.Buttons & PSP_CTRL_RIGHT) {
+
+        else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 480) {
             //pspDebugScreenPrintf("right is pressed \n");
             x = x + 5;
+            GFX::clear(0xFF000000);
+            drawwalls();
             GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
             GFX::swapBuffers();
-            sceDisplayWaitVblankStart();
-            
-            
-            
+            sceDisplayWaitVblankStart();       
         }
-        if (ctrldata.Buttons & PSP_CTRL_LEFT) {
+
+        else if (ctrldata.Buttons & PSP_CTRL_LEFT && x > 0) {
             //pspDebugScreenPrintf("left is pressed \n");
             x = x - 5;
-            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart();
-            
 
-            
+            GFX::clear(0xFF000000);
+            drawwalls(); 
+            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
+            GFX::swapBuffers();
+            sceDisplayWaitVblankStart();            
         }
+
+        else {
+            GFX::clear(0xFF000000);
+            drawwalls();
+            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+        }
+
             
     }
-
     
-
+    
     
 
     
