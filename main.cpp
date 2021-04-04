@@ -87,9 +87,9 @@ auto main() -> int {
 
     SceCtrlData ctrldata;
 
-    int x = 50, y = 50;
+    int x = 0, y = 0;
 
-    while(1) {
+    while(true) {
         
 
         sceCtrlReadBufferPositive(&ctrldata, 1);
@@ -98,7 +98,7 @@ auto main() -> int {
 
         if (ctrldata.Buttons & PSP_CTRL_UP && y > 0) {
             //pspDebugScreenPrintf("up is pressed \n");
-            y = y - 5;
+            y = y - 3;
             GFX::clear(0xFF000000);
             drawwalls();
             GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
@@ -109,7 +109,7 @@ auto main() -> int {
 
         else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 245) {
             //pspDebugScreenPrintf("down is pressed \n");
-            y = y + 5;
+            y = y + 3;
             GFX::clear(0xFF000000);
             drawwalls();
             GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
@@ -120,7 +120,7 @@ auto main() -> int {
 
         else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 480) {
             //pspDebugScreenPrintf("right is pressed \n");
-            x = x + 5;
+            x = x + 3;
             GFX::clear(0xFF000000);
             drawwalls();
             GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
@@ -131,7 +131,7 @@ auto main() -> int {
 
         else if (ctrldata.Buttons & PSP_CTRL_LEFT && x > 0) {
             //pspDebugScreenPrintf("left is pressed \n");
-            x = x - 5;
+            x = x - 3;
 
             GFX::clear(0xFF000000);
             drawwalls(); 
@@ -140,11 +140,13 @@ auto main() -> int {
             GFX::swapBuffers();
             sceDisplayWaitVblankStart();            
         }
-
         else {
             GFX::clear(0xFF000000);
             drawwalls();
             GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+            
+            GFX::swapBuffers();
+            sceDisplayWaitVblankStart();
         }
 
             
