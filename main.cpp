@@ -8,10 +8,9 @@
 #include <string>
 #include <pspjpeg.h>
 
-PSP_MODULE_INFO("doolhof", 0, 1, 0);
+PSP_MODULE_INFO("doolhofdegame", 0, 1, 0);
  
-
-//stop spel (werkt niet maar dat boeit niks)
+//stopt spel (werkt niet maar dat boeit niks)
 int exit_callback(int arg1, int arg2, void *common) {
     sceKernelExitGame();
     return 0;
@@ -44,7 +43,6 @@ int drawwalls() {
 auto main() -> int {
     
     setupcallbacks();
-   
     GFX::init();
 
     /*while(1) {
@@ -62,16 +60,16 @@ auto main() -> int {
     //file.close();
 
     //bestand 2
-    std::ifstream file2("test.txt");
-    std::string str;
-    std::getline(file2, str);
-    file2.close();
+    //std::ifstream file2("test.txt");
+    //std::string str;
+    //std::getline(file2, str);
+    //file2.close();
 
     //bestand 3
-    std::ifstream file3("ending.txt");
-    std::string str2;
-    std::getline(file3, str2);
-    file3.close();
+    //std::ifstream file3("ending.txt");
+    //std::string str2;
+    //std::getline(file3, str2);
+    //file3.close();
 
     
 
@@ -87,6 +85,7 @@ auto main() -> int {
 
     SceCtrlData ctrldata;
 
+    //movement hieronder (dont touch)
     int x = 0, y = 0;
 
     while(true) {
@@ -118,7 +117,7 @@ auto main() -> int {
             sceDisplayWaitVblankStart();
         }
 
-        else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 480) {
+        else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 455) {
             //pspDebugScreenPrintf("right is pressed \n");
             x = x + 3;
             GFX::clear(0xFF000000);
@@ -140,43 +139,17 @@ auto main() -> int {
             GFX::swapBuffers();
             sceDisplayWaitVblankStart();            
         }
+
         else {
             GFX::clear(0xFF000000);
             drawwalls();
             GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-            
+
             GFX::swapBuffers();
             sceDisplayWaitVblankStart();
         }
 
             
     }
-    
-    
-    
-
-    
-
-    /*oude controls
-    
-    sceCtrlSetSamplingCycle(0);
-    sceCtrlSetSamplingCycle(PSP_CTRL_MODE_ANALOG);
-
-    SceCtrlData ctrldata;
-    
-    while(true) {
-        sceCtrlReadBufferPositive(&ctrldata, 1);
-
-        if (ctrldata.Buttons & PSP_CTRL_CROSS) {
-            pspDebugScreenPrintf("cross is pressed \n");
-        }
-        
-        if (ctrldata.Buttons & PSP_CTRL_TRIANGLE) {
-            pspDebugScreenPrintf("triangle is pressed \n");
-        }
-        if (ctrldata.Buttons & PSP_CTRL_RTRIGGER && ctrldata.Buttons & PSP_CTRL_LTRIGGER) {
-            pspDebugScreenPrintf("L and R are both pressed \n");
-        }
-    }*/
     
 }
