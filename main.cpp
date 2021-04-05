@@ -10,7 +10,7 @@
 
 PSP_MODULE_INFO("doolhofdegame", 0, 1, 0);
  
-int x = 0, y = 0;
+int x = 0, y = 124;
 bool colision = false;
 
 //stopt spel (werkt niet maar dat boeit niks)
@@ -44,7 +44,7 @@ int muurheight[2] = {70, 50};
 int drawwalls() {
     //muren worden hier getekend
 
-    GFX::drawRect(muurtop[0], muurleft[0], muurheight[0], muurwidth[0], 0xFFFFFFFF);
+    GFX::drawRect(muurleft[0], muurtop[0], muurwidth[0], muurheight[0], 0xFFFFFFFF);
     return 0;
 }
 
