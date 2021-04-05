@@ -10,6 +10,9 @@
 
 PSP_MODULE_INFO("doolhofdegame", 0, 1, 0);
  
+int x = 0, y = 0;
+bool colision = false;
+
 //stopt spel (werkt niet maar dat boeit niks)
 int exit_callback(int arg1, int arg2, void *common) {
     sceKernelExitGame();
@@ -32,16 +35,47 @@ void setupcallbacks () {
         sceKernelStartThread(thid, 0, NULL);
     }
 }
+//muur variabelen
+int muurtop[2] = {100, 200};
+int muurleft[2] = {50, 200};
+int muurwidth[2] = {25, 50};
+int muurheight[2] = {30, 50};
 
 int drawwalls() {
     //muren worden hier getekend
 
-    GFX::drawRect(100, 60, 25, 30, 0xFFFFFFFF);
+    GFX::drawRect(muurtop[0], muurleft[0], muurheight[0], muurwidth[0], 0xFFFFFFFF);
+    GFX::drawRect(muurtop[1], muurleft[1], muurheight[1], muurwidth[1], 0xFFFFFFFF);
     return 0;
 }
 
 int collision() {
-    //coming soon
+
+    pspDebugScreenInit();
+    int playertop = y;
+    int playerbottom = y + 25;
+    int playerleft = x;
+    int playerright = x + 25;
+
+    for (int i = 0; i < 2; i++) {
+
+    int muur_top = muurtop[i];
+    int muur_bottom = muurtop[i] + muurheight[i];
+    int muur_left = muurleft[i];
+    int muur_right = muurleft[i] + muurwidth[i];
+    //werkt nog niet
+    if (playerleft < muur_right && playerright > muur_left && playertop > muur_bottom && playerbottom < muur_top) {
+        pspDebugScreenPrintf("optie1");
+        colision = true;
+    }
+    else {
+        pspDebugScreenPrintf("optie2");
+        
+    }
+    
+    }
+    return 0;
+    //if (RectA.X1 < RectB.X2 && RectA.X2 > RectB.X1 && RectA.Y1 > RectB.Y2 && RectA.Y2 < RectB.Y1) 
 }
 
 auto main() -> int {
@@ -90,7 +124,7 @@ auto main() -> int {
     SceCtrlData ctrldata;
 
     //movement hieronder (dont touch)
-    int x = 0, y = 0;
+    
 
     while(true) {
         
@@ -99,59 +133,72 @@ auto main() -> int {
         //GFX::swapBuffers();
         //sceDisplayWaitVblankStart();
 
-        if (ctrldata.Buttons & PSP_CTRL_UP && y > 0) {
-            //pspDebugScreenPrintf("up is pressed \n");
-            y = y - 3;
-            GFX::clear(0xFF000000);
-            drawwalls();
-            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart();            
-        }
-
-        else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 245) {
-            //pspDebugScreenPrintf("down is pressed \n");
-            y = y + 3;
-            GFX::clear(0xFF000000);
-            drawwalls();
-            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart();
-        }
-
-        else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 455) {
-            //pspDebugScreenPrintf("right is pressed \n");
-            x = x + 3;
-            GFX::clear(0xFF000000);
-            drawwalls();
-            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart();       
-        }
-
-        else if (ctrldata.Buttons & PSP_CTRL_LEFT && x > 0) {
-            //pspDebugScreenPrintf("left is pressed \n");
-            x = x - 3;
-
-            GFX::clear(0xFF000000);
-            drawwalls(); 
-            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart();            
+        if (colision) {
+            
         }
 
         else {
-            GFX::clear(0xFF000000);
-            drawwalls();
-            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
 
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart();
+            if (ctrldata.Buttons & PSP_CTRL_UP && y > 0) {
+                //pspDebugScreenPrintf("up is pressed \n");
+                y = y - 3;
+                GFX::clear(0xFF000000);
+                drawwalls();
+                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
+                GFX::swapBuffers();
+                sceDisplayWaitVblankStart(); 
+                collision();           
+            }
+
+            else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 245) {
+                //pspDebugScreenPrintf("down is pressed \n");
+                y = y + 3;
+                GFX::clear(0xFF000000);
+                drawwalls();
+                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
+                GFX::swapBuffers();
+                sceDisplayWaitVblankStart();
+                collision();
+            }
+
+            else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 455) {
+                //pspDebugScreenPrintf("right is pressed \n");
+                x = x + 3;
+                GFX::clear(0xFF000000);
+                drawwalls();
+                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
+                GFX::swapBuffers();
+                sceDisplayWaitVblankStart(); 
+                collision();    
+            }
+
+            else if (ctrldata.Buttons & PSP_CTRL_LEFT && x > 0) {
+                //pspDebugScreenPrintf("left is pressed \n");
+                x = x - 3;
+
+                GFX::clear(0xFF000000);
+                drawwalls(); 
+                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
+                GFX::swapBuffers();
+                sceDisplayWaitVblankStart();  
+                collision();        
+            }
+
+            else {
+                GFX::clear(0xFF000000);
+                drawwalls();
+                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
+                GFX::swapBuffers();
+                sceDisplayWaitVblankStart();
+                collision();
+            }
         }
+        
 
             
     }
