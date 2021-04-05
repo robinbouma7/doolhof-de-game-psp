@@ -38,39 +38,40 @@ void setupcallbacks () {
 //muur variabelen
 int muurtop[2] = {100, 200};
 int muurleft[2] = {50, 200};
-int muurwidth[2] = {25, 50};
-int muurheight[2] = {30, 50};
+int muurwidth[2] = {20, 50};
+int muurheight[2] = {70, 50};
 
 int drawwalls() {
     //muren worden hier getekend
 
     GFX::drawRect(muurtop[0], muurleft[0], muurheight[0], muurwidth[0], 0xFFFFFFFF);
-    GFX::drawRect(muurtop[1], muurleft[1], muurheight[1], muurwidth[1], 0xFFFFFFFF);
     return 0;
 }
 
 int collision() {
-
+    
     pspDebugScreenInit();
     int playertop = y;
     int playerbottom = y + 25;
     int playerleft = x;
     int playerright = x + 25;
-
-    for (int i = 0; i < 2; i++) {
+ 
+    for (int i = 0; i < 1; i++) {
 
     int muur_top = muurtop[i];
     int muur_bottom = muurtop[i] + muurheight[i];
     int muur_left = muurleft[i];
     int muur_right = muurleft[i] + muurwidth[i];
     //werkt nog niet
-    if (playerleft < muur_right && playerright > muur_left && playertop > muur_bottom && playerbottom < muur_top) {
-        pspDebugScreenPrintf("optie1");
-        colision = true;
+    //if (player.top > muur_bottom || player.right < muur_left || player.bottom < muur_top || player.left > muur_right)
+    if (playertop > muur_bottom || playerright < muur_left || playerbottom < muur_top || playerleft > muur_right) {
+        
+        pspDebugScreenPrintf("geen collision\n");
+        GFX::drawRect(muur_top, muur_left, muurheight[i], muurwidth[i], 0xFFFFFFFF);
     }
     else {
-        pspDebugScreenPrintf("optie2");
-        
+        pspDebugScreenPrintf("wel collision\n");
+        colision = true;
     }
     
     }
