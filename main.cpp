@@ -9,8 +9,9 @@
 #include <pspjpeg.h>
 
 PSP_MODULE_INFO("doolhofdegame", 0, 1, 0);
-bool input= false;
- 
+
+//variabelen voor in hele bestand
+bool input= false; 
 int x = 0, y = 124;
 bool colision = false;
 
@@ -44,8 +45,8 @@ int muurheight[2] = {70, 50};
 
 int drawwalls() {
     //muren worden hier getekend
-
     GFX::drawRect(muurleft[0], muurtop[0], muurwidth[0], muurheight[0], 0xFFFFFFFF);
+    GFX::drawRect(muurleft[1], muurtop[1], muurwidth[1], muurheight[1], 0xFFFFFFFF);
     return 0;
 }
 
@@ -57,7 +58,7 @@ int collision() {
     int playerleft = x;
     int playerright = x + 25;
  
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 2; i++) {
 
     int muur_top = muurtop[i];
     int muur_bottom = muurtop[i] + muurheight[i];
@@ -66,11 +67,11 @@ int collision() {
     
     if (playertop > muur_bottom || playerright < muur_left || playerbottom < muur_top || playerleft > muur_right) {
         
-        pspDebugScreenPrintf("geen collision\n");
+        //pspDebugScreenPrintf("geen collision\n");
         GFX::drawRect(muur_top, muur_left, muurheight[i], muurwidth[i], 0xFFFFFFFF);
     }
     else {
-        pspDebugScreenPrintf("wel collision\n");
+        //pspDebugScreenPrintf("wel collision\n");
         colision = true;
     }
     
@@ -78,6 +79,23 @@ int collision() {
     return 0;
      
 }
+
+int finishcheck() {
+ //hier komt finish check, word collision maar dan met de finish en hij gaat niet dood bij collision
+}
+
+int resetplayer() {
+ //reset de player, nog niet getest.
+ x = 0; 
+ y = 124;
+ colision = false;
+ input= false; 
+ 
+ GFX::clear(0xFF000000);
+ drawwalls();
+ GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+}
+
 
 auto main() -> int {
     
@@ -92,7 +110,7 @@ auto main() -> int {
         GFX::swapBuffers();
         sceDisplayWaitVblankStart();
     }*/
-
+    // ooude dingen met bestanden. word niet meer gebruikt.
     //bestand 1
     //std::ofstream file("test.txt");
     //file << "1 2 3 hello PSP!" << std::endl;
@@ -135,7 +153,12 @@ auto main() -> int {
         //sceDisplayWaitVblankStart();
 
         if (colision) {
-            
+            pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
+            if (ctrldata.Buttons & PSP_CTRL_CROSS && y > 0) {
+              resetplayer();
+            }
+         else {
+          
         }
 
         else {
