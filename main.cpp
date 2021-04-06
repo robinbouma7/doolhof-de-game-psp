@@ -9,11 +9,12 @@
 #include <pspjpeg.h>
 
 PSP_MODULE_INFO("doolhofdegame", 0, 1, 0);
+bool input= false;
  
 int x = 0, y = 124;
 bool colision = false;
 
-//stopt spel (werkt niet maar dat boeit niks)
+//stopt spel 
 int exit_callback(int arg1, int arg2, void *common) {
     sceKernelExitGame();
     return 0;
@@ -62,8 +63,7 @@ int collision() {
     int muur_bottom = muurtop[i] + muurheight[i];
     int muur_left = muurleft[i];
     int muur_right = muurleft[i] + muurwidth[i];
-    //werkt nog niet
-    //if (player.top > muur_bottom || player.right < muur_left || player.bottom < muur_top || player.left > muur_right)
+    
     if (playertop > muur_bottom || playerright < muur_left || playerbottom < muur_top || playerleft > muur_right) {
         
         pspDebugScreenPrintf("geen collision\n");
@@ -76,7 +76,7 @@ int collision() {
     
     }
     return 0;
-    //if (RectA.X1 < RectB.X2 && RectA.X2 > RectB.X1 && RectA.Y1 > RectB.Y2 && RectA.Y2 < RectB.Y1) 
+     
 }
 
 auto main() -> int {
@@ -142,6 +142,7 @@ auto main() -> int {
 
             if (ctrldata.Buttons & PSP_CTRL_UP && y > 0) {
                 //pspDebugScreenPrintf("up is pressed \n");
+             if (!input){
                 y = y - 3;
                 GFX::clear(0xFF000000);
                 drawwalls();
@@ -149,11 +150,17 @@ auto main() -> int {
 
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart(); 
-                collision();           
+                collision();
+              input = true;
+             }
+             else {
+              
+             {
             }
 
             else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 245) {
                 //pspDebugScreenPrintf("down is pressed \n");
+             if (!input){
                 y = y + 3;
                 GFX::clear(0xFF000000);
                 drawwalls();
@@ -162,10 +169,16 @@ auto main() -> int {
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart();
                 collision();
+               input = true;
+             }
+             else {
+              
+             {
             }
 
             else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 455) {
                 //pspDebugScreenPrintf("right is pressed \n");
+             if (!input){
                 x = x + 3;
                 GFX::clear(0xFF000000);
                 drawwalls();
@@ -174,10 +187,16 @@ auto main() -> int {
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart(); 
                 collision();    
+               input = true;
+             }
+             else {
+              
+             {
             }
 
             else if (ctrldata.Buttons & PSP_CTRL_LEFT && x > 0) {
                 //pspDebugScreenPrintf("left is pressed \n");
+             if (!input){
                 x = x - 3;
 
                 GFX::clear(0xFF000000);
@@ -186,10 +205,16 @@ auto main() -> int {
 
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart();  
-                collision();        
+                collision(); 
+               input = true;
+             }
+             else {
+              
+             {
             }
 
             else {
+             input = false;
                 GFX::clear(0xFF000000);
                 drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
