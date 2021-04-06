@@ -51,7 +51,7 @@ int drawwalls() {
     GFX::drawRect(muurleft[1], muurtop[1], muurwidth[1], muurheight[1], 0xFFFFFFFF);
 
     //finish
-    GFX::drawRect(462, 111, 50, 50, 0xFF00FF00);
+    GFX::drawRect(430, 111, 50, 50, 0xFF00FF00);
     return 0;
 }
 
@@ -99,8 +99,8 @@ int finishcheck() {
 
     int finishtop = 111;
     int finishbottom = 161;
-    int finishleft = 462;
-    int finishright = 512;
+    int finishleft = 430;
+    int finishright = 480;
     
     if (playertop > finishbottom || playerright < finishleft || playerbottom < finishtop || playerleft > finishright) {
         
@@ -270,7 +270,7 @@ auto main() -> int {
              }
             }
 
-            else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 245) {
+            else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 247) {
                 //pspDebugScreenPrintf("down is pressed \n");
              if (!input){
                 y = y + 15;
@@ -306,7 +306,7 @@ auto main() -> int {
                 sceDisplayWaitVblankStart(); 
                 collision();    
                 finishcheck();
-               input = true;
+                input = true;
              }
              else {
                  GFX::clear(0xFF000000);
@@ -354,8 +354,43 @@ auto main() -> int {
                 input = false;
             }
         }
-        
+        //als sprite van scherm is sprite terug duwen
+        if (x > 455) {
+            x = 455;
+            GFX::clear(0xFF000000);
+            drawwalls();
+            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
 
+            GFX::swapBuffers();
+            sceDisplayWaitVblankStart(); 
+        }
+        if (y > 247) {
+            y = 247;
+            GFX::clear(0xFF000000);
+            drawwalls();
+            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
+            GFX::swapBuffers();
+            sceDisplayWaitVblankStart(); 
+        }
+        if (x < 0) {
+            x = 0;
+            GFX::clear(0xFF000000);
+            drawwalls();
+            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
+            GFX::swapBuffers();
+            sceDisplayWaitVblankStart(); 
+        }
+        if (y < 0) {
+            y = 0;
+            GFX::clear(0xFF000000);
+            drawwalls();
+            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
+            GFX::swapBuffers();
+            sceDisplayWaitVblankStart(); 
+        }
             
     }
     
