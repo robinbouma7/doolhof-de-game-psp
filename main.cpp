@@ -108,11 +108,8 @@ int finishcheck() {
         //raakt finish niet
     }
     else {
-        
-        
-
         finished = true;
-        //nomessage = true;
+        nomessage = true;
     }
     
     
@@ -120,16 +117,19 @@ int finishcheck() {
 }
 
 int resetplayer() {
- //reset de player, nog niet getest.
- x = 0; 
- y = 124;
- colision = false;
- input= false; 
- 
- GFX::clear(0xFF000000);
- drawwalls();
- GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
- return 0;
+ //reset de player
+    x = 0; 
+    y = 124;
+    colision = false;
+    input= false; 
+    finished = false;
+    
+    GFX::clear(0xFF000000);
+    drawwalls();
+    GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+    GFX::swapBuffers();
+    sceDisplayWaitVblankStart(); 
+    return 0;
 }
 
 
@@ -204,7 +204,7 @@ auto main() -> int {
                 //niks, message al laten zien.
             }
 
-            if (ctrldata.Buttons & PSP_CTRL_CROSS && y > 0) {
+            if (ctrldata.Buttons & PSP_CTRL_CROSS) {
                 //player resetten
                 resetplayer();
             }
@@ -214,8 +214,9 @@ auto main() -> int {
 
           
         }
+
         //finish gebeurtenissen
-        if (finished) {
+        else if (finished) {
            
             if (nomessage){
             
@@ -232,9 +233,9 @@ auto main() -> int {
                 //niks, message al laten zien.
             }
 
-            if (ctrldata.Buttons & PSP_CTRL_CROSS && y > 0) {
+            if (ctrldata.Buttons & PSP_CTRL_CROSS) {
                 //player resetten
-                resetplayer();
+                resetplayer(); 
             }
             else {
                 //niks doen, geen input
@@ -263,8 +264,9 @@ auto main() -> int {
                  GFX::clear(0xFF000000);
                 drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
                 GFX::swapBuffers();
-                sceDisplayWaitVblankStart(); 
+                sceDisplayWaitVblankStart();
              }
             }
 
@@ -283,11 +285,12 @@ auto main() -> int {
                input = true;
              }
              else {
-                 GFX::clear(0xFF000000);
+                  GFX::clear(0xFF000000);
                 drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
                 GFX::swapBuffers();
-                sceDisplayWaitVblankStart(); 
+                sceDisplayWaitVblankStart();
              }
             }
 
@@ -309,8 +312,9 @@ auto main() -> int {
                  GFX::clear(0xFF000000);
                 drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
                 GFX::swapBuffers();
-                sceDisplayWaitVblankStart(); 
+                sceDisplayWaitVblankStart();
              }
             }
 
@@ -330,15 +334,17 @@ auto main() -> int {
                input = true;
              }
              else {
-                GFX::clear(0xFF000000);
+                 GFX::clear(0xFF000000);
                 drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+
                 GFX::swapBuffers();
-                sceDisplayWaitVblankStart(); 
+                sceDisplayWaitVblankStart();
              }
             }
 
             else {
+             input = false;
                 GFX::clear(0xFF000000);
                 drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
