@@ -15,6 +15,7 @@ bool input= false;
 int x = 0, y = 124;
 bool colision = false;
 bool nomessage = true;
+bool finished = false;
 
 //stopt spel 
 int exit_callback(int arg1, int arg2, void *common) {
@@ -48,6 +49,9 @@ int drawwalls() {
     //muren worden hier getekend
     GFX::drawRect(muurleft[0], muurtop[0], muurwidth[0], muurheight[0], 0xFFFFFFFF);
     GFX::drawRect(muurleft[1], muurtop[1], muurwidth[1], muurheight[1], 0xFFFFFFFF);
+
+    //finish
+    GFX::drawRect(462, 111, 50, 50, 0xFF00FF00);
     return 0;
 }
 
@@ -69,11 +73,11 @@ int collision() {
     if (playertop > muur_bottom || playerright < muur_left || playerbottom < muur_top || playerleft > muur_right) {
         
         //pspDebugScreenPrintf("geen collision\n");
-        GFX::drawRect(muur_top, muur_left, muurheight[i], muurwidth[i], 0xFFFFFFFF);
+        
     }
     else {
         //pspDebugScreenPrintf("wel collision\n");
-        //scherm legen
+        
         
 
         colision = true;
@@ -87,6 +91,31 @@ int collision() {
 
 int finishcheck() {
  //hier komt finish check, word collision maar dan met de finish en hij gaat niet dood bij collision
+ int playertop = y;
+    int playerbottom = y + 25;
+    int playerleft = x;
+    int playerright = x + 25;
+ 
+
+    int finishtop = 111;
+    int finishbottom = 161;
+    int finishleft = 462;
+    int finishright = 512;
+    
+    if (playertop > finishbottom || playerright < finishleft || playerbottom < finishtop || playerleft > finishright) {
+        
+        
+        //raakt finish niet
+    }
+    else {
+        
+        
+
+        finished = true;
+        //nomessage = true;
+    }
+    
+    
  return 0;
 }
 
@@ -157,6 +186,7 @@ auto main() -> int {
         //GFX::swapBuffers();
         //sceDisplayWaitVblankStart();
 
+        //death screen
         if (colision) {
            
             if (nomessage){
@@ -168,6 +198,34 @@ auto main() -> int {
             pspDebugScreenInit();
 
             pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
+            nomessage = false;
+            }
+            else {
+                //niks, message al laten zien.
+            }
+
+            if (ctrldata.Buttons & PSP_CTRL_CROSS && y > 0) {
+                //player resetten
+                resetplayer();
+            }
+            else {
+                //niks doen, geen input
+            }
+
+          
+        }
+        //finish gebeurtenissen
+        if (finished) {
+           
+            if (nomessage){
+            
+            GFX::clear(0xFF000000);
+            GFX::swapBuffers();
+            sceDisplayWaitVblankStart(); 
+
+            pspDebugScreenInit();
+
+            pspDebugScreenPrintf("je bent gefinished! score coming soon. druk op x om opnieuw te starten.\n");
             nomessage = false;
             }
             else {
@@ -198,6 +256,7 @@ auto main() -> int {
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart(); 
                 collision();
+                finishcheck();
                 input = true;
              }
              else {
@@ -220,6 +279,7 @@ auto main() -> int {
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart();
                 collision();
+                finishcheck();
                input = true;
              }
              else {
@@ -242,6 +302,7 @@ auto main() -> int {
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart(); 
                 collision();    
+                finishcheck();
                input = true;
              }
              else {
@@ -264,11 +325,12 @@ auto main() -> int {
 
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart();  
-                collision(); 
+                collision();
+                finishcheck(); 
                input = true;
              }
              else {
-                 GFX::clear(0xFF000000);
+                GFX::clear(0xFF000000);
                 drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
                 GFX::swapBuffers();
@@ -277,14 +339,13 @@ auto main() -> int {
             }
 
             else {
-                input = false;
                 GFX::clear(0xFF000000);
                 drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
 
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart();
-                collision();
+                input = false;
             }
         }
         
