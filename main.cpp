@@ -7,6 +7,9 @@
 #include <iostream>
 #include <string>
 #include <pspjpeg.h>
+#include <psputils.h>
+#include <pspge.h>
+#include <cstdint>
 
 PSP_MODULE_INFO("doolhofdegame", 0, 1, 0);
 
@@ -57,6 +60,7 @@ int drawwalls() {
 
 int collision() {
     
+
     pspDebugScreenInit();
     int playertop = y;
     int playerbottom = y + 25;
@@ -181,7 +185,7 @@ auto main() -> int {
 
     while(true) {
         
-
+        
         sceCtrlReadBufferPositive(&ctrldata, 1);
         //GFX::swapBuffers();
         //sceDisplayWaitVblankStart();
@@ -261,7 +265,7 @@ auto main() -> int {
                 input = true;
              }
              else {
-                 GFX::clear(0xFF000000);
+                GFX::clear(0xFF000000);
                 drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
 
@@ -387,7 +391,6 @@ auto main() -> int {
             GFX::clear(0xFF000000);
             drawwalls();
             GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-
             GFX::swapBuffers();
             sceDisplayWaitVblankStart(); 
         }
