@@ -1,4 +1,4 @@
-#include "gfx.h"
+#include "gfx.hpp"
 #include <pspge.h>
 #include <pspdisplay.h>
 #include <psputils.h>
@@ -37,8 +37,8 @@ namespace GFX{
         if (x > 480) {
             x = 480;
         }
-        if (y > 480) {
-            y = 480;
+        if (y > 272) {
+            y = 272;
         }
         if (x + w > 480) {
             w = 480 - x;
