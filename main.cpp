@@ -41,10 +41,10 @@ void setupcallbacks () {
 
 
 //wall variables
-int muurtop[2] = {100, 200};
-int muurleft[2] = {50, 200};
-int muurwidth[2] = {20, 50};
-int muurheight[2] = {70, 50};
+int muurtop[2] = {116, 200};
+int muurleft[2] = {0, 200};
+int muurwidth[2] = {40, 50};
+int muurheight[2] = {6, 50};
 
 int drawwalls() {
     //draw the walls
@@ -92,7 +92,7 @@ int collision() {
 }
 
 int finishcheck() {
-    //check if touching finish and finish if it does,
+    //check if touching finish and end game if it does,
     int playertop = y;
     int playerbottom = y + 25;
     int playerleft = x;
@@ -172,28 +172,22 @@ auto main() -> int {
     //sceCtrlSetSamplingCycle(0);
     //sceCtrlSetSamplingCycle(PSP_CTRL_MODE_ANALOG);
 
-    SceCtrlData ctrldata;
-    sceCtrlReadBufferPositive(&ctrldata, 1);
-    //movement under here
     
+    //movement under here
+    SceCtrlData ctrldata;
     while(1) {
-        
-        
-        
-        //GFX::swapBuffers();
-        //sceDisplayWaitVblankStart();
-
-       
+            
+            sceCtrlReadBufferPositive(&ctrldata, 1);
 
             if (!dead && !finished) {
 
                 GFX::clear(0xFF000000);
                 
 
-                if (ctrldata.Buttons & PSP_CTRL_UP && y > 0) {
+                if (ctrldata.Buttons & PSP_CTRL_UP) {
                     //pspDebugScreenPrintf("up is pressed \n");
-                    if (!input){
-                        y = y - 15;
+                    if (!input && y > 0){
+                        y = y - 20;
                         input = true;
                     }
                     else {
@@ -202,10 +196,10 @@ auto main() -> int {
                     
                 }
 
-                else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 247) {
+                else if (ctrldata.Buttons & PSP_CTRL_DOWN) {
                     //pspDebugScreenPrintf("down is pressed \n");
-                    if (!input){
-                        y = y + 15;
+                    if (!input && y < 247){
+                        y = y + 20;
                         input = true;
                     }
                     else {
@@ -214,10 +208,10 @@ auto main() -> int {
                     
                 }
 
-                else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 455) {
+                else if (ctrldata.Buttons & PSP_CTRL_RIGHT) {
                     //pspDebugScreenPrintf("right is pressed \n");
-                    if (!input) {
-                        x = x + 15;
+                    if (!input && x < 455) {
+                        x = x + 20;
                         input = true;
                      }
                      else {
@@ -226,10 +220,10 @@ auto main() -> int {
 
                 }
 
-                else if (ctrldata.Buttons & PSP_CTRL_LEFT && x > 0) {
+                else if (ctrldata.Buttons & PSP_CTRL_LEFT) {
                     //pspDebugScreenPrintf("left is pressed \n");
-                    if (!input){
-                        x = x - 15;
+                    if (!input && x > 0){
+                        x = x - 20;
                         input = true;
                     }
 
@@ -243,7 +237,7 @@ auto main() -> int {
                 
                 else {
                
-                input = false;
+                    input = false;
                 }
                 
                 
@@ -260,19 +254,22 @@ auto main() -> int {
 
         else {
             
-            pspDebugScreenInit();
+            
 
             if (dead && nomessage) {
                 //death screen
+                pspDebugScreenInit();
                 pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
                 nomessage = false;
-
+                 
             }
             
             else if (finished && nomessage) {
                 //finish screen
+                pspDebugScreenInit();
                 pspDebugScreenPrintf("je bent gefinished! score coming soon. druk op x om opnieuw te starten.\n");
                 nomessage = false;
+                
             }
             
             else if (ctrldata.Buttons & PSP_CTRL_CROSS) {
