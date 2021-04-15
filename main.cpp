@@ -173,13 +173,13 @@ auto main() -> int {
     //sceCtrlSetSamplingCycle(PSP_CTRL_MODE_ANALOG);
 
     SceCtrlData ctrldata;
-
+    sceCtrlReadBufferPositive(&ctrldata, 1);
     //movement under here
     
     while(1) {
         
         
-        sceCtrlReadBufferPositive(&ctrldata, 1);
+        
         //GFX::swapBuffers();
         //sceDisplayWaitVblankStart();
 
@@ -194,80 +194,76 @@ auto main() -> int {
                     //pspDebugScreenPrintf("up is pressed \n");
                     if (!input){
                         y = y - 15;
-                        
-                        
                         input = true;
                     }
                     else {
-
-                        
-                        
-                    }
-                   
+   
+                    }  
                     
                 }
 
                 else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 247) {
                     //pspDebugScreenPrintf("down is pressed \n");
-                if (!input){
-                    y = y + 15;
-                    
-                    
-                input = true;
-                }
-                else {
-                
-                }
-                    
+                    if (!input){
+                        y = y + 15;
+                        input = true;
+                    }
+                    else {
+
+                    } 
                     
                 }
 
                 else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 455) {
                     //pspDebugScreenPrintf("right is pressed \n");
-                if (!input) {
-                    x = x + 15;
-                    input = true;
-                }
-                else {
-                    
-                }
-                   
-                    
+                    if (!input) {
+                        x = x + 15;
+                        input = true;
+                     }
+                     else {
+
+                     }
+
                 }
 
                 else if (ctrldata.Buttons & PSP_CTRL_LEFT && x > 0) {
                     //pspDebugScreenPrintf("left is pressed \n");
-                if (!input){
-                    x = x - 15;
-                    input = true;
-                }
-                else {
-                    
-                }
+                    if (!input){
+                        x = x - 15;
+                        input = true;
+                    }
+
+                    else {
+
+                    }
                      
                     
                 }
 
+                
                 else {
                
                 input = false;
                 }
+                
+                
                 drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart(); 
                 collision();
                 finishcheck();
+           
             }
         
+        
 
-        else if (dead || finished) {
+        else {
             
+            pspDebugScreenInit();
+
             if (dead && nomessage) {
                 //death screen
-
-                pspDebugScreenInit();
-
                 pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
                 nomessage = false;
 
@@ -275,15 +271,13 @@ auto main() -> int {
             
             else if (finished && nomessage) {
                 //finish screen
-                pspDebugScreenInit();
-
                 pspDebugScreenPrintf("je bent gefinished! score coming soon. druk op x om opnieuw te starten.\n");
                 nomessage = false;
             }
             
             else if (ctrldata.Buttons & PSP_CTRL_CROSS) {
-                    //reset player
-                    resetplayer();
+                //reset player
+                resetplayer();
             }
 
             
