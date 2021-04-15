@@ -2,7 +2,6 @@
 #include <pspge.h>
 #include <pspdisplay.h>
 #include <psputils.h>
-#include <cstdint>
 
 
 
