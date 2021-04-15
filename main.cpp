@@ -2,21 +2,17 @@
 #include <pspdebug.h>
 #include <pspdisplay.h>
 #include <pspctrl.h>
-#include "gfx.h"
-#include <fstream>
-#include <iostream>
-#include <string>
+#include "gfx.hpp"
 #include <pspjpeg.h>
 #include <psputils.h>
-#include <pspge.h>
-#include <cstdint>
+
 
 PSP_MODULE_INFO("doolhofdegame", 0, 1, 0);
 
 //variables for the whole file
 bool input = false; 
 int x = 0, y = 124;
-bool colision = false;
+bool dead = false;
 bool nomessage = true;
 bool finished = false;
 
@@ -88,7 +84,7 @@ int collision() {
         
         
 
-        colision = true;
+        dead = true;
         nomessage = true;
     }
     
@@ -113,7 +109,7 @@ int finishcheck() {
     if (playertop > finishbottom || playerright < finishleft || playerbottom < finishtop || playerleft > finishright) {
         
         
-        //dnot touching the finish, so do nothing.
+        //not touching the finish, so do nothing.
     }
     else {
         finished = true;
@@ -128,8 +124,8 @@ int resetplayer() {
  //reset player
     x = 0; 
     y = 124;
-    colision = false;
-    input= false; 
+    dead = false;
+    input = false; 
     finished = false;
     
     GFX::clear(0xFF000000);
@@ -181,173 +177,134 @@ auto main() -> int {
     //pspDebugScreenPrintf(str2.c_str());
 
     
-    sceCtrlSetSamplingCycle(0);
-    sceCtrlSetSamplingCycle(PSP_CTRL_MODE_ANALOG);
+    //sceCtrlSetSamplingCycle(0);
+    //sceCtrlSetSamplingCycle(PSP_CTRL_MODE_ANALOG);
 
     SceCtrlData ctrldata;
 
     //movement under here
-
-    while(true) {
+    
+    while(1) {
         
         
         sceCtrlReadBufferPositive(&ctrldata, 1);
         //GFX::swapBuffers();
         //sceDisplayWaitVblankStart();
 
-        //death screen
-        if (colision) {
-           
-            if (nomessage){
-            
-            GFX::clear(0xFF000000);
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart(); 
+       
 
-            pspDebugScreenInit();
+            if (!dead && !finished) {
 
-            pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
-            nomessage = false;
-            }
-            else {
-                //nothing, mesage already shown
-            }
-
-            if (ctrldata.Buttons & PSP_CTRL_CROSS) {
-                //reset player
-                resetplayer();
-            }
-            else {
-                //do nothing, no input
-            }
-
-          
-        }
-
-        //finish stuff
-        else if (finished) {
-           
-            if (nomessage){
-            
-            GFX::clear(0xFF000000);
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart(); 
-
-            pspDebugScreenInit();
-
-            pspDebugScreenPrintf("je bent gefinished! score coming soon. druk op x om opnieuw te starten.\n");
-            nomessage = false;
-            }
-            else {
-                //nothing, mesage already shown
-            }
-
-            if (ctrldata.Buttons & PSP_CTRL_CROSS) {
-                //reset player
-                resetplayer(); 
-            }
-            else {
-                //do nothing, no input
-            }
-
-          
-        }
-
-        else {
-
-            if (ctrldata.Buttons & PSP_CTRL_UP && y > 0) {
-                //pspDebugScreenPrintf("up is pressed \n");
-             if (!input){
-                y = y - 15;
-                input = true;
-             }
-             else {
-   
-             }
                 GFX::clear(0xFF000000);
                 drawwalls();
-                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
 
+                if (ctrldata.Buttons & PSP_CTRL_UP && y > 0) {
+                    //pspDebugScreenPrintf("up is pressed \n");
+                    if (!input){
+                        y = y - 15;
+                        
+                        
+                        input = true;
+                    }
+                    else {
+
+                        
+                        
+                    }
+                   
+                    
+                }
+
+                else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 247) {
+                    //pspDebugScreenPrintf("down is pressed \n");
+                if (!input){
+                    y = y + 15;
+                    
+                    
+                input = true;
+                }
+                else {
+                
+                }
+                    
+                    
+                }
+
+                else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 455) {
+                    //pspDebugScreenPrintf("right is pressed \n");
+                if (!input) {
+                    x = x + 15;
+                    input = true;
+                }
+                else {
+                    
+                }
+                   
+                    
+                }
+
+                else if (ctrldata.Buttons & PSP_CTRL_LEFT && x > 0) {
+                    //pspDebugScreenPrintf("left is pressed \n");
+                if (!input){
+                    x = x - 15;
+                    input = true;
+                }
+                else {
+                    
+                }
+                     
+                    
+                }
+
+                else {
+               
+                input = false;
+                }
+                
+                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
                 GFX::swapBuffers();
                 sceDisplayWaitVblankStart(); 
                 collision();
                 finishcheck();
             }
+        
 
-            else if (ctrldata.Buttons & PSP_CTRL_DOWN && y < 247) {
-                //pspDebugScreenPrintf("down is pressed \n");
-             if (!input){
-                y = y + 15;
+        else if (dead || finished) {
+            //death screen
+            if (dead && nomessage) {
+            
                 
-               input = true;
-             }
-             else {
-              
-             }
-                GFX::clear(0xFF000000);
-                drawwalls();
-                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+                
+                //GFX::clear(0xFF000000);
+                
 
-                GFX::swapBuffers();
-                sceDisplayWaitVblankStart();
-                collision();
-                finishcheck();
+                pspDebugScreenInit();
+
+                pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
+                nomessage = false;
+                
+                
+
+
+            
+            }
+            
+            else if (finished && nomessage) {
+                 pspDebugScreenInit();
+
+                    pspDebugScreenPrintf("je bent gefinished! score coming soon. druk op x om opnieuw te starten.\n");
+                    nomessage = false;
+            }
+            
+            if (ctrldata.Buttons & PSP_CTRL_CROSS) {
+                    //reset player
+                    resetplayer();
             }
 
-            else if (ctrldata.Buttons & PSP_CTRL_RIGHT && x < 455) {
-                //pspDebugScreenPrintf("right is pressed \n");
-             if (!input) {
-                x = x + 15;
-                
-                input = true;
-             }
-             else {
-                
-             }
-                GFX::clear(0xFF000000);
-                drawwalls();
-                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-
-                GFX::swapBuffers();
-                sceDisplayWaitVblankStart(); 
-                collision();    
-                finishcheck();
-            }
-
-            else if (ctrldata.Buttons & PSP_CTRL_LEFT && x > 0) {
-                //pspDebugScreenPrintf("left is pressed \n");
-             if (!input){
-                x = x - 15;
-
-                
-               input = true;
-             }
-             else {
-                
-             }
-                GFX::clear(0xFF000000);
-                drawwalls(); 
-                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-
-                GFX::swapBuffers();
-                sceDisplayWaitVblankStart();  
-                collision();
-                finishcheck(); 
-            }
-
-            else {
-               input = false;
-               GFX::clear(0xFF000000);
-               drawwalls();
-               GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-
-               GFX::swapBuffers();
-               sceDisplayWaitVblankStart();
-               input = false;
-            }
+            
         }
         
-        //push sprite that is off screen back
+        /*push sprite that is off screen back, not used for performance
         if (x > 455) {
             x = 455;
             GFX::clear(0xFF000000);
@@ -382,7 +339,7 @@ auto main() -> int {
             GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
             GFX::swapBuffers();
             sceDisplayWaitVblankStart(); 
-        }
+        }*/
             
     }
     

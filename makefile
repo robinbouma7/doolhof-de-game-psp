@@ -1,9 +1,9 @@
 TARGET = doolhof
 OBJS = main.o \
 gfx.o
-
-CFLAGS = -O2
-CXXFLAGS = $(CFLAGS) -fno-rtti -fno-exceptions -std=c++14
+ 
+CFLAGS = -O0
+CXXFLAGS = $(CFLAGS) -fno-rtti  -std=c++14
 ASFLAGS = $(CFLAGS)
 
 LIBS += -lstdc++
