@@ -41,15 +41,17 @@ void setupcallbacks () {
 
 
 //wall variables
-int muurtop[2] = {116, 200};
-int muurleft[2] = {0, 200};
-int muurwidth[2] = {40, 50};
-int muurheight[2] = {6, 50};
+int muurtop[7] = {116, 151, 110, 0, 157, 0, 266};
+int muurleft[7] = {0, 0, 67, 0, 0, 6, 6};
+int muurwidth[7] = {38, 38, 6, 6, 6, 479, 479};
+int muurheight[7] = {6, 6, 48, 116, 115, 6, 6};
 
 int drawwalls() {
     //draw the walls
-    GFX::drawRect(muurleft[0], muurtop[0], muurwidth[0], muurheight[0], 0xFFFFFFFF);
-    GFX::drawRect(muurleft[1], muurtop[1], muurwidth[1], muurheight[1], 0xFFFFFFFF);
+    for (int j = 0; j < 7; j++) {
+    GFX::drawRect(muurleft[j], muurtop[j], muurwidth[j], muurheight[j], 0xFFFFFFFF);
+    }
+    
 
     //finish
     GFX::drawRect(430, 111, 50, 50, 0xFF00FF00);
@@ -65,7 +67,7 @@ int collision() {
     int playerleft = x;
     int playerright = x + 25;
  
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 4; i++) {
 
     int muur_top = muurtop[i];
     int muur_bottom = muurtop[i] + muurheight[i];
