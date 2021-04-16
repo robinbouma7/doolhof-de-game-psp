@@ -11,7 +11,6 @@ PSP_MODULE_INFO("doolhofdegame", 0, 1, 0);
 bool input = false; 
 int x = 0, y = 124;
 bool dead = false;
-bool nomessage = true;
 bool finished = false;
 
 
@@ -81,9 +80,8 @@ int collision() {
         //pspDebugScreenPrintf("wel collision\n");
         
         
-
-        dead = true;
-        nomessage = true;
+        
+        die();
     }
     
     }
@@ -98,20 +96,15 @@ int finishcheck() {
     int playerleft = x;
     int playerright = x + 25;
  
-
-    int finishtop = 111;
-    int finishbottom = 161;
-    int finishleft = 430;
-    int finishright = 480;
     
-    if (playertop > finishbottom || playerright < finishleft || playerbottom < finishtop || playerleft > finishright) {
+    if (playertop > 161 || playerright < 430 || playerbottom < 111 || playerleft > 480) {
         
         
         //not touching the finish, so do nothing.
     }
     else {
-        finished = true;
-        nomessage = true;
+        
+        finish();
     }
     
     
@@ -128,6 +121,36 @@ int resetplayer() {
     return 0;
 }
 
+int die() {
+    pspDebugScreenInit();
+    pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
+   
+    while (1) {
+        input = true;
+        if (ctrldata.Buttons & PSP_CTRL_CROSS) {
+            //reset player
+            resetplayer();
+            return 0;
+        }
+        
+    }
+    
+}
+
+int finish() {
+    pspDebugScreenInit();
+    pspDebugScreenPrintf("je bent gefinished! score coming soon. \n druk op x om opnieuw te starten.\n");
+    
+    while (1) {
+        input = true;
+        if (ctrldata.Buttons & PSP_CTRL_CROSS) {
+            //reset player
+            
+            resetplayer();
+            return 0;
+        }
+    }
+}
 
 auto main() -> int {
     
@@ -185,7 +208,7 @@ auto main() -> int {
 
        
 
-            if (!dead && !finished) {
+            
 
                 GFX::clear(0xFF000000);
                 
@@ -254,34 +277,11 @@ auto main() -> int {
                 collision();
                 finishcheck();
            
-            }
+            
         
         
 
-        else {
-            
-            pspDebugScreenInit();
-
-            if (dead && nomessage) {
-                //death screen
-                pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
-                nomessage = false;
-
-            }
-            
-            else if (finished && nomessage) {
-                //finish screen
-                pspDebugScreenPrintf("je bent gefinished! score coming soon. druk op x om opnieuw te starten.\n");
-                nomessage = false;
-            }
-            
-            else if (ctrldata.Buttons & PSP_CTRL_CROSS) {
-                //reset player
-                resetplayer();
-            }
-
-            
-        }
+       
         
         /*push sprite that is off screen back, not used for performance
         if (x > 455) {
