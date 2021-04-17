@@ -7,7 +7,7 @@
 
 PSP_MODULE_INFO("doolhofdegame", 0, 1, 0);
 
-//variables for the whole file
+//global variables
 bool input = false; 
 int x = 0, y = 124;
 bool dead = false;
@@ -57,7 +57,7 @@ int die() {
         sceCtrlReadBufferPositive(&ctrldata, 1);
         input = true;
         if (ctrldata.Buttons & PSP_CTRL_CROSS) {
-            //reset player
+            //reset player 
             resetplayer();
             return 0;
         }
@@ -85,19 +85,19 @@ int finish() {
 
 
 //wall variables
-int muurtop[7] = {116, 151, 110, 0, 157, 0, 266};
-int muurleft[7] = {0, 0, 67, 0, 0, 6, 6};
-int muurwidth[7] = {38, 38, 6, 6, 6, 479, 479};
-int muurheight[7] = {6, 6, 48, 116, 115, 6, 6};
+int muurtop[9] = {116, 151, 110, 0, 157, 0, 266, 6, 161};
+int muurleft[9] = {0, 0, 67, 0, 0, 6, 6, 474, 474};
+int muurwidth[9] = {38, 38, 6, 6, 6, 479, 479, 6, 6};
+int muurheight[9] = {6, 6, 48, 116, 115, 6, 6, 105, 161};
 
 int drawwalls() {
     //draw the walls
-    for (int j = 0; j < 7; j++) {
+    for (int j = 0; j < 9; j++) {
     GFX::drawRect(muurleft[j], muurtop[j], muurwidth[j], muurheight[j], 0xFFFFFFFF);
     }
     
 
-    //finish
+    //draw the finish
     GFX::drawRect(430, 111, 50, 50, 0xFF00FF00);
     return 0;
 }

@@ -1,12 +1,13 @@
 TARGET = doolhof
 OBJS = main.o \
-gfx.o
+gfx.o \
+glib2d.o
  
-CFLAGS = -G0 -Wall
+CFLAGS = -G0 -Wall -g
 CXXFLAGS = $(CFLAGS) -fno-rtti  -std=c++14 -fno-exceptions
 ASFLAGS = $(CFLAGS)
 
-LIBS += -lstdc++
+LIBS = -lstdc++ -ljpeg -lpng -lz -lpspgum -lpspgu -lpsprtc -lm -lpspvram
 
 # psp stuff
 BUILD_PRX = 1
@@ -20,3 +21,9 @@ PSP_EBOOT_SND0 = SND0.at3
 
 PSPSDK = $(shell psp-config --pspsdk-path)
 include $(PSPSDK)/lib/build.mak
+install:
+	cp ./EBOOT.PBP $(MEDIA)$(TARGET)
+dir:
+	mkdir $(MEDIA)$(TARGET)
+lclean:
+	rm *.o
