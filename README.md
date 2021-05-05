@@ -3,7 +3,7 @@ doolhof, de game! ft. ricardo. maar nu voor de psp!
 
 
 
-als je het wil spelen:
+als je hetwil spelen:
 
 1. download de code
 
@@ -13,11 +13,13 @@ als je het wil spelen:
 
 spelen op emulator:
 
-1. open ppsspp (de emulator, als je het niet heb eerst installeren)
+1. download de code
 
-2. klik op laden
+2. open ppsspp (de emulator, als je het niet heb eerst installeren)
 
-3. ga naar de plek waar je het heb gedownload en selecteer de EBOOT.PBP. hiermee lanceer je het spel.
+3. klik op laden
+
+4. ga naar de plek waar je het heb gedownload en selecteer de EBOOT.PBP. hiermee lanceer je het spel.
 
 
 
