@@ -2,14 +2,16 @@
 #include <pspdebug.h>
 #include <pspdisplay.h>
 #include <pspctrl.h>
-#include "gfx.hpp"
+#include "glib2d.h"
 
 
-PSP_MODULE_INFO("doolhofdegame", 0, 1, 0);
+PSP_MODULE_INFO("doolhofdegame", 0, 1, 1);
+PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
+
 
 //global variables
 bool input = false; 
-int x = 0, y = 124;
+float x = 12.5, y = 136;
 bool dead = false;
 bool finished = false;
 
@@ -36,6 +38,8 @@ void setupcallbacks () {
         sceKernelStartThread(thid, 0, NULL);
     }
 }
+
+
 
 int resetplayer() {
     //reset player
@@ -85,33 +89,52 @@ int finish() {
 
 
 //wall variables
-int muurtop[9] = {116, 151, 110, 0, 157, 0, 266, 6, 161};
-int muurleft[9] = {0, 0, 67, 0, 0, 6, 6, 474, 474};
-int muurwidth[9] = {38, 38, 6, 6, 6, 479, 479, 6, 6};
-int muurheight[9] = {6, 6, 48, 116, 115, 6, 6, 105, 161};
+int muurtop[8] = {47, 151, 0, 157, 0, 266, 6, 161};
+int muurleft[8] = {45, 0, 0, 0, 6, 6, 474, 474};
+int muurwidth[8] = {6, 43, 6, 6, 479, 479, 6, 6};
+int muurheight[8] = {68, 6, 116, 115, 6, 6, 105, 161};
 
 int drawwalls() {
     //draw the walls
-    for (int j = 0; j < 9; j++) {
+    /*
+    for (int j = 0; j < 8; j++) {
     GFX::drawRect(muurleft[j], muurtop[j], muurwidth[j], muurheight[j], 0xFFFFFFFF);
     }
     
 
     //draw the finish
-    GFX::drawRect(430, 111, 50, 50, 0xFF00FF00);
+    GFX::drawRect(430, 111, 50, 50, 0xFF00FF00);*/
+    for (int j = 0; j < 8; j++) {
+        g2dBeginRects(NULL); // No texture
+        g2dSetColor(WHITE);
+        g2dSetScaleWH(muurwidth[j],muurheight[j]);
+        g2dSetCoordXY(muurleft[j],muurtop[j]);
+        //g2dSetAlpha(muurleft[j]*255/G2D_SCR_W); // Useless alpha effect ;)
+        g2dAdd();
+        g2dEnd();
+    
+    }
+    g2dBeginRects(NULL); // No texture
+        g2dSetColor(GREEN);
+        g2dSetScaleWH(50,50);
+        g2dSetCoordXY(430,111);
+        //g2dSetAlpha(muurleft[j]*255/G2D_SCR_W); // Useless alpha effect ;)
+        g2dAdd();
+        g2dEnd();
+
     return 0;
 }
 
 int collision() {
     
 
-    pspDebugScreenInit();
+    //pspDebugScreenInit();
     int playertop = y;
     int playerbottom = y + 25;
     int playerleft = x;
     int playerright = x + 25;
  
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 8; i++) {
 
     int muur_top = muurtop[i];
     int muur_bottom = muurtop[i] + muurheight[i];
@@ -138,24 +161,21 @@ int collision() {
 
 int finishcheck() {
     //check if touching finish and end game if it does,
-    int playertop = y;
-    int playerbottom = y + 25;
-    int playerleft = x;
-    int playerright = x + 25;
+    float playertop = y - 12.5;
+    float playerbottom = y + 12.5;
+    float playerleft = x - 12.5;
+    float playerright = x + 12.5;
  
     
     if (playertop > 161 || playerright < 430 || playerbottom < 111 || playerleft > 480) {
-        
-        
         //not touching the finish, so do nothing.
     }
     else {
         
         finish();
     }
-    
-    
- return 0;
+      
+    return 0;
 }
 
 
@@ -165,8 +185,19 @@ int finishcheck() {
 auto main() -> int {
     
     setupcallbacks();
-    GFX::init();
+    //GFX::init();
+    g2dTexture* ric = g2dTexLoad("ricardo.png",G2D_SWIZZLE);
+    int alpha = 255,
+    w = (ric == NULL ? 10 : ric->w),
+    h = (ric == NULL ? 10 : ric->h),
+    rot = 0;
+    //x = G2D_SCR_W/2;
+    //y = G2D_SCR_H/2;
 
+      
+      
+    
+     
     /* rectangle drawing, left here as example
     while(1) { 
         GFX::clear(0xFFFFCA02);
@@ -214,13 +245,13 @@ auto main() -> int {
 
             
 
-                GFX::clear(0xFF000000);
-                
+                //GFX::clear(0xFF000000);
+                 
 
                 if (ctrldata.Buttons & PSP_CTRL_UP) {
                     //pspDebugScreenPrintf("up is pressed \n");
-                    if (!input && y > 0){
-                        y = y - 20;
+                    if (!input && y > 12.5){
+                        y-=15;
                         input = true;
                     }
                     else {
@@ -231,8 +262,8 @@ auto main() -> int {
 
                 else if (ctrldata.Buttons & PSP_CTRL_DOWN) {
                     //pspDebugScreenPrintf("down is pressed \n");
-                    if (!input && y < 247){
-                        y = y + 20;
+                    if (!input && y < 234.5){
+                        y+=15;
                         input = true;
                     }
                     else {
@@ -243,8 +274,8 @@ auto main() -> int {
 
                 else if (ctrldata.Buttons & PSP_CTRL_RIGHT) {
                     //pspDebugScreenPrintf("right is pressed \n");
-                    if (!input && x < 455) {
-                        x = x + 20;
+                    if (!input && x < 442.5) {
+                        x+=15;
                         input = true;
                      }
                      else {
@@ -255,8 +286,8 @@ auto main() -> int {
 
                 else if (ctrldata.Buttons & PSP_CTRL_LEFT) {
                     //pspDebugScreenPrintf("left is pressed \n");
-                    if (!input && x > 0){
-                        x = x - 20;
+                    if (!input && x > 12.5){
+                        x-=15;
                         input = true;
                     }
 
@@ -274,12 +305,40 @@ auto main() -> int {
                 }
                 
                 
-                drawwalls();
+                /*drawwalls();
                 GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+                
                 GFX::swapBuffers();
-                sceDisplayWaitVblankStart(); 
-                collision();
+                sceDisplayWaitVblankStart(); */
+                
+
+                g2dClear(BLACK);
+
+                drawwalls();
+
+                g2dBeginRects(ric);
+                if (ric == NULL) {
+                    g2dSetColor(RED);
+                }
+                g2dSetCoordMode(G2D_CENTER);
+                g2dSetAlpha(255);
+                g2dSetScaleWH(w,h);
+                g2dSetCoordXY(x,y);
+                g2dSetRotation(0);
+                g2dAdd();
+                g2dEnd();
+
+               
+
+                //collision();
                 finishcheck();
+    
+
+    
+                
+    
+    
+    g2dFlip(G2D_VSYNC);
            
             
         
