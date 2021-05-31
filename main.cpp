@@ -45,15 +45,15 @@ int resetplayer() {
     //reset player
     x = 12.5; 
     y = 136;
-    dead = false;
-    input = false; 
+    dead = false; 
     finished = false;
     return 0;
 }
 
 //death screen
 int die() {
-    
+
+   
     SceCtrlData ctrldata;
     pspDebugScreenInit();
     pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
@@ -266,8 +266,8 @@ auto main() -> int {
                 g2dFlip(G2D_VSYNC);
 
 
-                //collision();
-                //finishcheck();
+                collision();
+                finishcheck();
     
         /*push sprite that is off screen back, not used for performance
         //might bring back but needs to be rewritten for that. cause it uses the old drawing system.
