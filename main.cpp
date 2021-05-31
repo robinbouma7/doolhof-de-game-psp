@@ -3,9 +3,6 @@
 #include <pspdisplay.h>
 #include <pspctrl.h>
 #include "glib2d.h"
-#include <chrono>
-#include <thread>
-
 
 
 PSP_MODULE_INFO("doolhofdegame", 0, 1, 1);
@@ -269,8 +266,8 @@ auto main() -> int {
                 g2dFlip(G2D_VSYNC);
 
 
-                collision();
-                finishcheck();
+                //collision();
+                //finishcheck();
     
         /*push sprite that is off screen back, not used for performance
         //might bring back but needs to be rewritten for that. cause it uses the old drawing system.

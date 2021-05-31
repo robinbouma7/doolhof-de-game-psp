@@ -3,7 +3,7 @@ OBJS = main.o \
 glib2d.o
  
 CFLAGS = -G0 -Wall -g
-CXXFLAGS = $(CFLAGS) -fno-rtti  -fno-exceptions -fpermissive
+CXXFLAGS = $(CFLAGS) -fno-rtti  -fno-exceptions
 ASFLAGS = $(CFLAGS)
 
 LIBS = -lpng -ljpeg -lz -lpspgu -lm -lpspvram -lstdc++
