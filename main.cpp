@@ -3,6 +3,9 @@
 #include <pspdisplay.h>
 #include <pspctrl.h>
 #include "glib2d.h"
+#include <chrono>
+#include <thread>
+
 
 
 PSP_MODULE_INFO("doolhofdegame", 0, 1, 1);
@@ -43,8 +46,8 @@ void setupcallbacks () {
 
 int resetplayer() {
     //reset player
-    x = 0; 
-    y = 124;
+    x = 12.5; 
+    y = 136;
     dead = false;
     input = false; 
     finished = false;
@@ -53,6 +56,7 @@ int resetplayer() {
 
 //death screen
 int die() {
+    
     SceCtrlData ctrldata;
     pspDebugScreenInit();
     pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
@@ -71,6 +75,8 @@ int die() {
 }
 //end screen
 int finish() {
+    
+    
     SceCtrlData ctrldata;
     pspDebugScreenInit();
     pspDebugScreenPrintf("je bent gefinished! druk op x om opnieuw te starten.\nscore coming soonisch probably i hope!");
@@ -95,30 +101,22 @@ int muurwidth[8] = {6, 43, 6, 6, 479, 479, 6, 6};
 int muurheight[8] = {68, 6, 116, 115, 6, 6, 105, 161};
 
 int drawwalls() {
-    //draw the walls
-    /*
-    for (int j = 0; j < 8; j++) {
-    GFX::drawRect(muurleft[j], muurtop[j], muurwidth[j], muurheight[j], 0xFFFFFFFF);
-    }
-    
-
-    //draw the finish
-    GFX::drawRect(430, 111, 50, 50, 0xFF00FF00);*/
+    //draw the walls    
     for (int j = 0; j < 8; j++) {
         g2dBeginRects(NULL); // No texture
         g2dSetColor(WHITE);
         g2dSetScaleWH(muurwidth[j],muurheight[j]);
         g2dSetCoordXY(muurleft[j],muurtop[j]);
-        //g2dSetAlpha(muurleft[j]*255/G2D_SCR_W); // Useless alpha effect ;)
         g2dAdd();
         g2dEnd();
     
     }
+
+    //draw the finish
     g2dBeginRects(NULL); // No texture
         g2dSetColor(GREEN);
         g2dSetScaleWH(50,50);
         g2dSetCoordXY(430,111);
-        //g2dSetAlpha(muurleft[j]*255/G2D_SCR_W); // Useless alpha effect ;)
         g2dAdd();
         g2dEnd();
 
@@ -128,11 +126,11 @@ int drawwalls() {
 int collision() {
     
 
-    //pspDebugScreenInit();
-    int playertop = y;
-    int playerbottom = y + 25;
-    int playerleft = x;
-    int playerright = x + 25;
+    //0.1 difference so only collision on overlap
+    float playertop = y - 12.4;
+    float playerbottom = y + 12.4;
+    float playerleft = x - 12.4;
+    float playerright = x + 12.4;
  
     for (int i = 0; i < 8; i++) {
 
@@ -148,9 +146,7 @@ int collision() {
     }
     else {
         //pspDebugScreenPrintf("wel collision\n");
-        
-        
-        
+
         die();
     }
     
@@ -160,21 +156,19 @@ int collision() {
 }
 
 int finishcheck() {
-    //check if touching finish and end game if it does,
-    float playertop = y - 12.5;
-    float playerbottom = y + 12.5;
-    float playerleft = x - 12.5;
-    float playerright = x + 12.5;
+    //check if touching finish and end game if it does, 0.1 difference so only collision on overlap.
+    float playertop = y - 12.4;
+    float playerbottom = y + 12.4;
+    float playerleft = x - 12.4;
+    float playerright = x + 12.4;
  
     
     if (playertop > 161 || playerright < 430 || playerbottom < 111 || playerleft > 480) {
         //not touching the finish, so do nothing.
     }
-    else {
-        
+    else {       
         finish();
-    }
-      
+    }      
     return 0;
 }
 
@@ -185,67 +179,18 @@ int finishcheck() {
 auto main() -> int {
     
     setupcallbacks();
-    //GFX::init();
+
+    //player sprite
     g2dTexture* ric = g2dTexLoad("ricardo.png",G2D_SWIZZLE);
-    int alpha = 255,
-    w = (ric == NULL ? 10 : ric->w),
-    h = (ric == NULL ? 10 : ric->h),
-    rot = 0;
-    //x = G2D_SCR_W/2;
-    //y = G2D_SCR_H/2;
+    int w = (ric == NULL ? 10 : ric->w),
+    h = (ric == NULL ? 10 : ric->h);
 
-      
-      
-    
-     
-    /* rectangle drawing, left here as example
-    while(1) { 
-        GFX::clear(0xFFFFCA02);
-        //GFX::drawRect(10, 10, 30, 30, 0xFF00FFFF);
-        GFX::swapBuffers();
-        sceDisplayWaitVblankStart();
-    }*/
-    
-    // old stuff, not used any more
-    //bestand 1
-    //std::ofstream file("test.txt");
-    //file << "1 2 3 hello PSP!" << std::endl;
-    //file.close();
-
-    //bestand 2
-    //std::ifstream file2("test.txt");
-    //std::string str;
-    //std::getline(file2, str);
-    //file2.close();
-
-    //bestand 3
-    //std::ifstream file3("ending.txt");
-    //std::string str2;
-    //std::getline(file3, str2);
-    //file3.close();
-
-    
-
-    //pspDebugScreenInit();
-    //pspDebugScreenPrintf(str.c_str());
-
-    //pspDebugScreenPrintf("\n\nricardo coming soon \n");
-    //pspDebugScreenPrintf(str2.c_str());
-
-    
-    //sceCtrlSetSamplingCycle(0);
-    //sceCtrlSetSamplingCycle(PSP_CTRL_MODE_ANALOG);
-
-    
     //movement under here
     SceCtrlData ctrldata;
     while(1) {
             
             sceCtrlReadBufferPositive(&ctrldata, 1);
 
-            
-
-                //GFX::clear(0xFF000000);
                  
 
                 if (ctrldata.Buttons & PSP_CTRL_UP) {
@@ -262,7 +207,7 @@ auto main() -> int {
 
                 else if (ctrldata.Buttons & PSP_CTRL_DOWN) {
                     //pspDebugScreenPrintf("down is pressed \n");
-                    if (!input && y < 234.5){
+                    if (!input && y < 259.5){
                         y+=15;
                         input = true;
                     }
@@ -274,7 +219,7 @@ auto main() -> int {
 
                 else if (ctrldata.Buttons & PSP_CTRL_RIGHT) {
                     //pspDebugScreenPrintf("right is pressed \n");
-                    if (!input && x < 442.5) {
+                    if (!input && x < 467.5) {
                         x+=15;
                         input = true;
                      }
@@ -304,14 +249,7 @@ auto main() -> int {
                     input = false;
                 }
                 
-                
-                /*drawwalls();
-                GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-                
-                GFX::swapBuffers();
-                sceDisplayWaitVblankStart(); */
-                
-
+                //draw stuff
                 g2dClear(BLACK);
 
                 drawwalls();
@@ -327,26 +265,15 @@ auto main() -> int {
                 g2dSetRotation(0);
                 g2dAdd();
                 g2dEnd();
+  
+                g2dFlip(G2D_VSYNC);
 
-               
 
-                //collision();
+                collision();
                 finishcheck();
     
-
-    
-                
-    
-    
-    g2dFlip(G2D_VSYNC);
-           
-            
-        
-        
-
-       
-        
         /*push sprite that is off screen back, not used for performance
+        //might bring back but needs to be rewritten for that. cause it uses the old drawing system.
         if (x > 455) {
             x = 455;
             GFX::clear(0xFF000000);
