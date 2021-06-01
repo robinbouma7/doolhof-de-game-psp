@@ -55,10 +55,11 @@ int resetplayer() {
 //death screen
 int die() {
 
-    g2dClear(BLACK);
+    
     
     SceCtrlData ctrldata;
     pspDebugScreenInit();
+    pspDebugScreenSetTextColor(0xFFFFFFFF);
     pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
    
     while (true) {
@@ -76,10 +77,9 @@ int die() {
 //end screen
 int finish() {
     
-    g2dClear(BLACK);
-    
     SceCtrlData ctrldata;
     pspDebugScreenInit();
+    pspDebugScreenSetTextColor(0xFFFFFFFF);
     pspDebugScreenPrintf("je bent gefinished! druk op x om opnieuw te starten.\nscore coming soonisch probably i hope!");
     
     while (true) {
@@ -253,14 +253,20 @@ auto main() -> int {
                     
                 }
                 else if (ctrldata.Buttons & PSP_CTRL_RTRIGGER && ctrldata.Buttons & PSP_CTRL_SELECT) {
-                    
+                    pspDebugScreenInit();
+                    pspDebugScreenSetTextColor(0xFFFF0000);
                     if (!input && wallc) {
                         wallc = false;
                         input = true;
+                        pspDebugScreenClear();
+                        pspDebugScreenPrintf("muur collision uitgeschakeld");
+
                     }
                     else if (!input && !wallc) {
                         wallc = true;
                         input = true;
+                        pspDebugScreenClear();
+                        pspDebugScreenPrintf("muur collision ingeschakeld");
                     } 
                     else {
             
@@ -268,14 +274,19 @@ auto main() -> int {
 
                 }
                 else if (ctrldata.Buttons & PSP_CTRL_LTRIGGER && ctrldata.Buttons & PSP_CTRL_SELECT) {
-                    
+                    pspDebugScreenInit();
+                    pspDebugScreenSetTextColor(0xFFFF0000);
                     if (!input && finishc) {
                         finishc = false;
                         input = true;
+                        pspDebugScreenClear();
+                        pspDebugScreenPrintf("finish collision uitgeschakeld");
                     }
                     else if (!input && !finishc) {
                         finishc = true;
                         input = true;
+                        pspDebugScreenClear();
+                        pspDebugScreenPrintf("finish collision ingeschakeld");
                     } 
                     else {
             
