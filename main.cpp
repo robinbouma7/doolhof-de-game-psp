@@ -14,6 +14,7 @@ bool input = false;
 float x = 12.5, y = 136;
 bool dead = false;
 bool finished = false;
+bool wallc = true, finishc = true;
 
 
 //stops the game 
@@ -53,7 +54,8 @@ int resetplayer() {
 //death screen
 int die() {
 
-   
+    g2dClear(BLACK);
+    
     SceCtrlData ctrldata;
     pspDebugScreenInit();
     pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
@@ -73,6 +75,7 @@ int die() {
 //end screen
 int finish() {
     
+    g2dClear(BLACK);
     
     SceCtrlData ctrldata;
     pspDebugScreenInit();
@@ -239,6 +242,37 @@ auto main() -> int {
                      
                     
                 }
+                else if (ctrldata.Buttons & PSP_CTRL_RTRIGGER && ctrldata.Buttons & PSP_CTRL_SELECT) {
+                    
+                    if (!input && wallc) {
+                        wallc = false;
+                        input = true;
+                    }
+                    else if (!input && !wallc) {
+                        wallc = true;
+                        input = true;
+                    } 
+                    else {
+            
+                    }
+
+                }
+                else if (ctrldata.Buttons & PSP_CTRL_LTRIGGER && ctrldata.Buttons & PSP_CTRL_SELECT) {
+                    
+                    if (!input && finishc) {
+                        finishc = false;
+                        input = true;
+                    }
+                    else if (!input && !finishc) {
+                        finishc = true;
+                        input = true;
+                    } 
+                    else {
+            
+                    }
+
+                }
+
 
                 
                 else {
@@ -265,9 +299,19 @@ auto main() -> int {
   
                 g2dFlip(G2D_VSYNC);
 
-
-                collision();
-                finishcheck();
+                if (wallc) {
+                    collision();
+                }
+                else {
+                    //no wall collision check
+                }
+                if (finishc) {
+                    finishcheck();
+                }
+                else {
+                    //no finish collision check
+                }
+        
     
         /*push sprite that is off screen back, not used for performance
         //might bring back but needs to be rewritten for that. cause it uses the old drawing system.
