@@ -10,8 +10,9 @@ PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
 
 
 //global variables
-bool input = false; 
 float x = 12.5, y = 136;
+
+bool input = false; 
 bool dead = false;
 bool finished = false;
 bool wallc = true, finishc = true;
