@@ -125,50 +125,59 @@ int drawwalls() {
 
 int collision() {
     
+    if (wallc) {
+        //0.1 difference so only collision on overlap
+        float playertop = y - 12.4;
+        float playerbottom = y + 12.4;
+        float playerleft = x - 12.4;
+        float playerright = x + 12.4;
 
-    //0.1 difference so only collision on overlap
-    float playertop = y - 12.4;
-    float playerbottom = y + 12.4;
-    float playerleft = x - 12.4;
-    float playerright = x + 12.4;
- 
-    for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
 
-    int muur_top = muurtop[i];
-    int muur_bottom = muurtop[i] + muurheight[i];
-    int muur_left = muurleft[i];
-    int muur_right = muurleft[i] + muurwidth[i];
-    
-    if (playertop > muur_bottom || playerright < muur_left || playerbottom < muur_top || playerleft > muur_right) {
-        
-        //pspDebugScreenPrintf("geen collision\n");
-        
+            int muur_top = muurtop[i];
+            int muur_bottom = muurtop[i] + muurheight[i];
+            int muur_left = muurleft[i];
+            int muur_right = muurleft[i] + muurwidth[i];
+
+            if (playertop > muur_bottom || playerright < muur_left || playerbottom < muur_top || playerleft > muur_right) {
+
+                //pspDebugScreenPrintf("geen collision\n");
+
+            }
+            else {
+                //pspDebugScreenPrintf("wel collision\n");
+
+                die();
+            }
+
+        }
     }
     else {
-        //pspDebugScreenPrintf("wel collision\n");
-
-        die();
-    }
-    
+        //wall collision is off
     }
     return 0;
      
 }
 
 int finishcheck() {
-    //check if touching finish and end game if it does, 0.1 difference so only collision on overlap.
-    float playertop = y - 12.4;
-    float playerbottom = y + 12.4;
-    float playerleft = x - 12.4;
-    float playerright = x + 12.4;
- 
-    
-    if (playertop > 161 || playerright < 430 || playerbottom < 111 || playerleft > 480) {
-        //not touching the finish, so do nothing.
+    if (finishc) {
+        //check if touching finish and end game if it does, 0.1 difference so only collision on overlap.
+        float playertop = y - 12.4;
+        float playerbottom = y + 12.4;
+        float playerleft = x - 12.4;
+        float playerright = x + 12.4;
+
+
+        if (playertop > 161 || playerright < 430 || playerbottom < 111 || playerleft > 480) {
+            //not touching the finish, so do nothing.
+        }
+        else {       
+            finish();
+        }     
     }
-    else {       
-        finish();
-    }      
+    else {
+        //finish collision is off
+    }
     return 0;
 }
 
@@ -298,19 +307,11 @@ auto main() -> int {
                 g2dEnd();
   
                 g2dFlip(G2D_VSYNC);
+        
 
-                if (wallc) {
-                    collision();
-                }
-                else {
-                    //no wall collision check
-                }
-                if (finishc) {
-                    finishcheck();
-                }
-                else {
-                    //no finish collision check
-                }
+                collision();
+                finishcheck();
+           
         
     
         /*push sprite that is off screen back, not used for performance
