@@ -60,6 +60,7 @@ int die() {
     SceCtrlData ctrldata;
     pspDebugScreenInit();
     pspDebugScreenSetTextColor(0xFFFFFFFF);
+    pspDebugScreenSetBackColor(0xFF000000);
     pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
    
     while (true) {
@@ -80,6 +81,7 @@ int finish() {
     SceCtrlData ctrldata;
     pspDebugScreenInit();
     pspDebugScreenSetTextColor(0xFFFFFFFF);
+    pspDebugScreenSetBackColor(0xFF000000);
     pspDebugScreenPrintf("je bent gefinished! druk op x om opnieuw te starten.\nscore coming soonisch probably i hope!");
     
     while (true) {
@@ -253,20 +255,14 @@ auto main() -> int {
                     
                 }
                 else if (ctrldata.Buttons & PSP_CTRL_RTRIGGER && ctrldata.Buttons & PSP_CTRL_SELECT) {
-                    pspDebugScreenInit();
-                    pspDebugScreenSetTextColor(0xFFFF0000);
+                    
                     if (!input && wallc) {
                         wallc = false;
                         input = true;
-                        pspDebugScreenClear();
-                        pspDebugScreenPrintf("muur collision uitgeschakeld");
-
                     }
                     else if (!input && !wallc) {
                         wallc = true;
                         input = true;
-                        pspDebugScreenClear();
-                        pspDebugScreenPrintf("muur collision ingeschakeld");
                     } 
                     else {
             
@@ -274,19 +270,16 @@ auto main() -> int {
 
                 }
                 else if (ctrldata.Buttons & PSP_CTRL_LTRIGGER && ctrldata.Buttons & PSP_CTRL_SELECT) {
-                    pspDebugScreenInit();
-                    pspDebugScreenSetTextColor(0xFFFF0000);
+                   
                     if (!input && finishc) {
                         finishc = false;
                         input = true;
-                        pspDebugScreenClear();
-                        pspDebugScreenPrintf("finish collision uitgeschakeld");
+                        
                     }
                     else if (!input && !finishc) {
                         finishc = true;
                         input = true;
-                        pspDebugScreenClear();
-                        pspDebugScreenPrintf("finish collision ingeschakeld");
+                        
                     } 
                     else {
             
@@ -323,11 +316,27 @@ auto main() -> int {
 
                 collision();
                 finishcheck();
+        
+                    pspDebugScreenInit();
+                    pspDebugScreenSetTextColor(0xFFFF0000);
+                    pspDebugScreenSetBackColor(0xFFFFFFFF);
+                    pspDebugScreenClear();
+                    if (!finishc && wallc) {
+                    pspDebugScreenPrintf("finish collision ingeschakeld \n");
+                    }
+                    else if (!wallc && finishc) {
+                        pspDebugScreenPrintf("muur collision ingeschakeld \n");
+                    }
+                    else if (!wallc && !finishc) {
+                         pspDebugScreenPrintf("muur en finish collision ingeschakeld \n");
+                    }
+            
            
         
     
         /*push sprite that is off screen back, not used for performance
-        //might bring back but needs to be rewritten for that. cause it uses the old drawing system.
+        //might bring back but needs to be rewritten for that. cause it uses the old drawing system. 
+        //but not realy needed because of the walls on the edge that prevent this also.
         if (x > 455) {
             x = 455;
             GFX::clear(0xFF000000);
