@@ -330,48 +330,9 @@ auto main() -> int {
                     else if (!wallc && !finishc) {
                          pspDebugScreenPrintf("muur en finish collision ingeschakeld \n");
                     }
-            
-           
-        
-    
-        /*push sprite that is off screen back, not used for performance
-        //might bring back but needs to be rewritten for that. cause it uses the old drawing system. 
-        //but not realy needed because of the walls on the edge that prevent this also.
-        if (x > 455) {
-            x = 455;
-            GFX::clear(0xFF000000);
-            drawwalls();
-            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
+                    else {
 
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart(); 
-        }
-        if (y > 247) {
-            y = 247;
-            GFX::clear(0xFF000000);
-            drawwalls();
-            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart(); 
-        }
-        if (x < 0) {
-            x = 0;
-            GFX::clear(0xFF000000);
-            drawwalls();
-            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart(); 
-        }
-        if (y < 0) {
-            y = 0;
-            GFX::clear(0xFF000000);
-            drawwalls();
-            GFX::drawRect(x, y, 25, 25, 0xFF00FFFF);
-            GFX::swapBuffers();
-            sceDisplayWaitVblankStart(); 
-        }*/
+                    }   
             
     }
     
