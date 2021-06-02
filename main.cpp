@@ -59,8 +59,7 @@ int die() {
     
     SceCtrlData ctrldata;
     pspDebugScreenInit();
-    pspDebugScreenSetTextColor(0xFFFFFFFF);
-    pspDebugScreenSetBackColor(0xFF000000);
+    pspDebugScreenSetTextColor(0xFF0000FF);
     pspDebugScreenPrintf("je ben dood, druk op X om opnieuw te beginnen.\n");
    
     while (true) {
@@ -80,10 +79,16 @@ int finish() {
     
     SceCtrlData ctrldata;
     pspDebugScreenInit();
-    pspDebugScreenSetTextColor(0xFFFFFFFF);
-    pspDebugScreenSetBackColor(0xFF000000);
-    pspDebugScreenPrintf("je bent gefinished! druk op x om opnieuw te starten.\nscore coming soonisch probably i hope!");
-    
+    pspDebugScreenSetTextColor(0xFFFF0000);
+    pspDebugScreenPrintf("je bent gefinished! druk op x om opnieuw te starten.\nscore coming soonisch probably i hope!\n");
+    pspDebugScreenSetTextColor(0xFF0000FF);
+    if (!wallc) {
+        pspDebugScreenPrintf("\nmuur collision stond uit dus geen valide run\n");
+    }
+    else {
+        
+    }   
+
     while (true) {
         sceCtrlReadBufferPositive(&ctrldata, 1);
         input = true;
@@ -316,25 +321,8 @@ auto main() -> int {
 
                 collision();
                 finishcheck();
-        
-                    //om te laten zien als bepaalde collision uit staat.
-                    pspDebugScreenInit();
-                    pspDebugScreenSetTextColor(0xFFFF0000);
-                    pspDebugScreenSetBackColor(0xFFFFFFFF);
-                    pspDebugScreenClear();
                     
-                    if (!finishc && wallc) {
-                    pspDebugScreenPrintf("finish collision ingeschakeld \n");
-                    }
-                    else if (!wallc && finishc) {
-                        pspDebugScreenPrintf("muur collision ingeschakeld \n");
-                    }
-                    else if (!wallc && !finishc) {
-                         pspDebugScreenPrintf("muur en finish collision ingeschakeld \n");
-                    }
-                    else {
-
-                    }   
+                    
             
     }
     
