@@ -11,14 +11,14 @@ PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
 
 //global variables
 float x = 12.5, y = 136;
-
 bool input = false; 
 bool dead = false;
 bool finished = false;
 bool wallc = true, finishc = true;
 
 
-//stops the game 
+//stops the game.
+//this is just code that works, so dont change this. (upcoming 3 functions)
 int exit_callback(int arg1, int arg2, void *common) {
     sceKernelExitGame();
     return 0;
@@ -156,7 +156,7 @@ int collision() {
         }
     }
     else {
-        //wall collision is off
+        //wall collision is off, so dont check for collision
     }
     return 0;
      
@@ -179,7 +179,7 @@ int finishcheck() {
         }     
     }
     else {
-        //finish collision is off
+        //finish collision is off, so dont check for collision
     }
     return 0;
 }
@@ -255,7 +255,7 @@ auto main() -> int {
                     
                 }
                 else if (ctrldata.Buttons & PSP_CTRL_RTRIGGER && ctrldata.Buttons & PSP_CTRL_SELECT) {
-                    
+                    //muur collision aan en uit zetten
                     if (!input && wallc) {
                         wallc = false;
                         input = true;
@@ -270,7 +270,7 @@ auto main() -> int {
 
                 }
                 else if (ctrldata.Buttons & PSP_CTRL_LTRIGGER && ctrldata.Buttons & PSP_CTRL_SELECT) {
-                   
+                    //finish collision aan en uit zetten
                     if (!input && finishc) {
                         finishc = false;
                         input = true;
@@ -290,7 +290,7 @@ auto main() -> int {
 
                 
                 else {
-               
+                    //als je niks indruk word hier input false. zodat je de knoppen moet klikken en niet in houden
                     input = false;
                 }
                 
@@ -317,10 +317,12 @@ auto main() -> int {
                 collision();
                 finishcheck();
         
+                    //om te laten zien als bepaalde collision uit staat.
                     pspDebugScreenInit();
                     pspDebugScreenSetTextColor(0xFFFF0000);
                     pspDebugScreenSetBackColor(0xFFFFFFFF);
                     pspDebugScreenClear();
+                    
                     if (!finishc && wallc) {
                     pspDebugScreenPrintf("finish collision ingeschakeld \n");
                     }
