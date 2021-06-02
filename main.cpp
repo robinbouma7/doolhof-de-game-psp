@@ -15,6 +15,7 @@ bool input = false;
 bool dead = false;
 bool finished = false;
 bool wallc = true, finishc = true;
+int score = 10000;
 
 
 //stops the game.
@@ -49,6 +50,7 @@ int resetplayer() {
     y = 136;
     dead = false; 
     finished = false;
+    score = 10000;
     return 0;
 }
 
@@ -80,10 +82,10 @@ int finish() {
     SceCtrlData ctrldata;
     pspDebugScreenInit();
     pspDebugScreenSetTextColor(0xFFFF0000);
-    pspDebugScreenPrintf("je bent gefinished! druk op x om opnieuw te starten.\nscore coming soonisch probably i hope!\n");
+    pspDebugScreenPrintf("je bent gefinished! druk op x om opnieuw te starten.\nje score is: %i\n", score);
     pspDebugScreenSetTextColor(0xFF0000FF);
     if (!wallc) {
-        pspDebugScreenPrintf("\nmuur collision stond uit dus geen valide run\n");
+        pspDebugScreenPrintf("\nmuur collision stond uit dus geen valide run. \nanders was je score: %i \n", score);
     }
     else {
         
@@ -315,9 +317,12 @@ auto main() -> int {
                 g2dSetRotation(0);
                 g2dAdd();
                 g2dEnd();
+               
+                
   
                 g2dFlip(G2D_VSYNC);
         
+                score-=1;
 
                 collision();
                 finishcheck();
