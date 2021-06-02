@@ -34,3 +34,4 @@ als je het wil bouwen:
 3. als het niet werkt moet er waarschijnlijk nog wat gedaan worden maar ik weet niet wat. neem dan contact op met de maker.
 
 4. stop de gemaakte eboot.pbp in de game_files folder en stop die in de game folder op de psp. als het goed is staat het spel dan in de memory stick folder bij game. je heb cfw nodig om te starten. als je dat niet heb neem contact op met de maker.
+je kan het ook op emulator spelen.
