@@ -216,6 +216,7 @@ auto main() -> int {
                     //pspDebugScreenPrintf("up is pressed \n");
                     if (!input && y > 12.5){
                         y-=15;
+                        score-=5;
                         input = true;
                     }
                     else {
@@ -228,6 +229,7 @@ auto main() -> int {
                     //pspDebugScreenPrintf("down is pressed \n");
                     if (!input && y < 259.5){
                         y+=15;
+                        score-=5;
                         input = true;
                     }
                     else {
@@ -240,6 +242,7 @@ auto main() -> int {
                     //pspDebugScreenPrintf("right is pressed \n");
                     if (!input && x < 467.5) {
                         x+=15;
+                        score-=5;
                         input = true;
                      }
                      else {
@@ -252,6 +255,7 @@ auto main() -> int {
                     //pspDebugScreenPrintf("left is pressed \n");
                     if (!input && x > 12.5){
                         x-=15;
+                        score-=5;
                         input = true;
                     }
 
