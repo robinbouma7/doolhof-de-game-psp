@@ -15,7 +15,10 @@ bool input = false;
 bool dead = false;
 bool finished = false;
 bool wallc = true, finishc = true;
+bool collected = false;
 int score = 10000;
+int coin-rng = rand() % 3;
+
 
 
 //stops the game.
@@ -51,6 +54,8 @@ int resetplayer() {
     dead = false; 
     finished = false;
     score = 10000;
+    collected = false;
+    coin-rng = rand() % 3;
     return 0;
 }
 
@@ -102,6 +107,10 @@ int finish() {
         }
     }
 }
+int coincollect() {
+    collected = true;
+    score+=1000;
+}
 
 
 //wall variables
@@ -124,13 +133,30 @@ int drawwalls() {
 
     //draw the finish
     g2dBeginRects(NULL); // No texture
-        g2dSetColor(GREEN);
-        g2dSetScaleWH(50,50);
-        g2dSetCoordXY(430,111);
-        g2dAdd();
-        g2dEnd();
+    g2dSetColor(GREEN);
+    g2dSetScaleWH(50,50);
+    g2dSetCoordXY(430,111);
+    g2dAdd();
+    g2dEnd();
 
     return 0;
+}
+int cointop[3] = {100, 200, 200};
+int coinleft[3] = {200, 100, 200};
+
+int drawcoin() {
+    
+    g2dBeginRects(coin);
+    if (coin == NULL) {
+        g2dSetColor(YELLOW);
+    }
+    g2dSetCoordMode(G2D_UP_LEFT);
+    g2dSetAlpha(255);
+    g2dSetScaleWH(coinw,coinh);
+    g2dSetCoordXY(coinleft[coin-rng],cointop[coin-rng]);
+    g2dSetRotation(0);
+    g2dAdd();
+    g2dEnd();
 }
 
 int collision() {
@@ -169,6 +195,25 @@ int collision() {
      
 }
 
+int coincollision() {
+    float playertop = y - 12.4;
+    float playerbottom = y + 12.4;
+    float playerleft = x - 12.4;
+    float playerright = x + 12.4;
+    
+    int coin-bottom = cointop[coin-rng] + coinh;
+    int coin-right = coinleft[coin-rng] + coinw;
+
+
+    if (playertop > coin-bottom || playerright < coinleft[coin-rng] || playerbottom < cointop[coin-rng] || playerleft > coin-right) {
+        //not touching coin, so do nothing.
+    }
+    else {       
+        coincollect();
+    }     
+    
+}
+
 int finishcheck() {
     if (finishc) {
         //check if touching finish and end game if it does, 0.1 difference so only collision on overlap.
@@ -205,9 +250,9 @@ auto main() -> int {
     h = (ric == NULL ? 10 : ric->h);
     
     //coin sprite
-     g2dTexture* coin = g2dTexLoad("coin.png",G2D_SWIZZLE);
-    int w = (coin == NULL ? 10 : coin->w),
-    h = (coin == NULL ? 10 : coin->h);
+    g2dTexture* coin = g2dTexLoad("coin.png",G2D_SWIZZLE);
+    int coinw = (coin == NULL ? 10 : coin->coinw),
+    coinh = (coin == NULL ? 10 : coin->coinh);
 
     //movement under here
     SceCtrlData ctrldata;
@@ -314,12 +359,15 @@ auto main() -> int {
                 g2dClear(BLACK);
 
                 drawwalls();
+                if (!collected) {
+                    drawcoin();
+                }
 
                 g2dBeginRects(ric);
                 if (ric == NULL) {
                     g2dSetColor(RED);
                 }
-                g2dSetCoordMode(G2D_CENTER);
+                g2dSetCoordMode(G2D_UP_LEFT);
                 g2dSetAlpha(255);
                 g2dSetScaleWH(w,h);
                 g2dSetCoordXY(x,y);
@@ -334,6 +382,7 @@ auto main() -> int {
                 score-=1;
 
                 collision();
+                coincollision()
                 finishcheck();
                     
                     
