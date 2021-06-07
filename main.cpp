@@ -203,6 +203,11 @@ auto main() -> int {
     g2dTexture* ric = g2dTexLoad("ricardo.png",G2D_SWIZZLE);
     int w = (ric == NULL ? 10 : ric->w),
     h = (ric == NULL ? 10 : ric->h);
+    
+    //coin sprite
+     g2dTexture* coin = g2dTexLoad("coin.png",G2D_SWIZZLE);
+    int w = (coin == NULL ? 10 : coin->w),
+    h = (coin == NULL ? 10 : coin->h);
 
     //movement under here
     SceCtrlData ctrldata;
