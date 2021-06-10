@@ -90,7 +90,7 @@ int finish() {
     pspDebugScreenPrintf("je bent gefinished! druk op x om opnieuw te starten.\nje score is: %i\n", score);
     pspDebugScreenSetTextColor(0xFF0000FF);
     if (!wallc) {
-        pspDebugScreenPrintf("\nmuur collision stond uit dus geen valide run. \nanders was je score: %i \n", score);
+        pspDebugScreenPrintf("\nmuur collision stond uit dus geen valide run.");
     }
     else {
         
