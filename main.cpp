@@ -3,6 +3,7 @@
 #include <pspdisplay.h>
 #include <pspctrl.h>
 #include "glib2d.h"
+#include <stdlib.h>
 
 
 PSP_MODULE_INFO("doolhofdegame", 0, 1, 1);
@@ -17,7 +18,9 @@ bool finished = false;
 bool wallc = true, finishc = true;
 bool collected = false;
 int score = 10000;
-int coin-rng = rand() % 3;
+int coinrng = rand() % 3;
+int coinw = 25,
+coinh = 25;
 
 
 
@@ -55,7 +58,7 @@ int resetplayer() {
     finished = false;
     score = 10000;
     collected = false;
-    coin-rng = rand() % 3;
+    coinrng = rand() % 3;
     return 0;
 }
 
@@ -110,6 +113,7 @@ int finish() {
 int coincollect() {
     collected = true;
     score+=1000;
+    return 0;
 }
 
 
@@ -145,6 +149,9 @@ int cointop[3] = {100, 200, 200};
 int coinleft[3] = {200, 100, 200};
 
 int drawcoin() {
+    //coin sprite
+    g2dTexture* coin = g2dTexLoad("coin.png",G2D_SWIZZLE);
+
     
     g2dBeginRects(coin);
     if (coin == NULL) {
@@ -153,10 +160,11 @@ int drawcoin() {
     g2dSetCoordMode(G2D_UP_LEFT);
     g2dSetAlpha(255);
     g2dSetScaleWH(coinw,coinh);
-    g2dSetCoordXY(coinleft[coin-rng],cointop[coin-rng]);
+    g2dSetCoordXY(coinleft[coinrng],cointop[coinrng]);
     g2dSetRotation(0);
     g2dAdd();
     g2dEnd();
+    return 0;
 }
 
 int collision() {
@@ -201,16 +209,17 @@ int coincollision() {
     float playerleft = x - 12.4;
     float playerright = x + 12.4;
     
-    int coin-bottom = cointop[coin-rng] + coinh;
-    int coin-right = coinleft[coin-rng] + coinw;
+    int coinbottom = cointop[coinrng] + coinh;
+    int coinright = coinleft[coinrng] + coinw;
 
 
-    if (playertop > coin-bottom || playerright < coinleft[coin-rng] || playerbottom < cointop[coin-rng] || playerleft > coin-right) {
+    if (playertop > coinbottom || playerright < coinleft[coinrng] || playerbottom < cointop[coinrng] || playerleft > coinright) {
         //not touching coin, so do nothing.
     }
     else {       
         coincollect();
     }     
+    return 0;
     
 }
 
@@ -249,10 +258,7 @@ auto main() -> int {
     int w = (ric == NULL ? 10 : ric->w),
     h = (ric == NULL ? 10 : ric->h);
     
-    //coin sprite
-    g2dTexture* coin = g2dTexLoad("coin.png",G2D_SWIZZLE);
-    int coinw = (coin == NULL ? 10 : coin->coinw),
-    coinh = (coin == NULL ? 10 : coin->coinh);
+    
 
     //movement under here
     SceCtrlData ctrldata;
@@ -367,7 +373,7 @@ auto main() -> int {
                 if (ric == NULL) {
                     g2dSetColor(RED);
                 }
-                g2dSetCoordMode(G2D_UP_LEFT);
+                g2dSetCoordMode(G2D_CENTER);
                 g2dSetAlpha(255);
                 g2dSetScaleWH(w,h);
                 g2dSetCoordXY(x,y);
@@ -382,7 +388,7 @@ auto main() -> int {
                 score-=1;
 
                 collision();
-                coincollision()
+                coincollision();
                 finishcheck();
                     
                     
