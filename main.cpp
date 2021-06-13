@@ -19,8 +19,9 @@ bool wallc = true, finishc = true;
 bool collected = false;
 int score = 10000;
 int coinrng = rand() % 3;
-int coinw = 25,
-coinh = 25;
+int coinw = 25;
+int coinh = 25;
+bool debug = false;
 
 
 
@@ -118,14 +119,14 @@ int coincollect() {
 
 
 //wall variables
-int muurtop[8] = {47, 151, 0, 157, 0, 266, 6, 161};
-int muurleft[8] = {45, 0, 0, 0, 6, 6, 474, 474};
-int muurwidth[8] = {6, 43, 6, 6, 479, 479, 6, 6};
-int muurheight[8] = {68, 6, 116, 115, 6, 6, 105, 161};
+int muurtop[10] = {47, 151, 0, 157, 0, 266, 6, 161, 195, 80};
+int muurleft[10] = {45, 0, 0, 0, 6, 6, 474, 474, 43, 90};
+int muurwidth[10] = {6, 43, 6, 6, 479, 479, 6, 6, 6, 6};
+int muurheight[10] = {68, 6, 116, 115, 6, 6, 105, 161, 30, 100};
 
 int drawwalls() {
     //draw the walls    
-    for (int j = 0; j < 8; j++) {
+    for (int j = 0; j < 10; j++) {
         g2dBeginRects(NULL); // No texture
         g2dSetColor(WHITE);
         g2dSetScaleWH(muurwidth[j],muurheight[j]);
