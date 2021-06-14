@@ -2,7 +2,7 @@ TARGET = doolhof
 OBJS = main.o \
 glib2d.o
  
-CFLAGS = -G0 -Wall -g
+CFLAGS = -G0 -Wall -g -O2
 CXXFLAGS = $(CFLAGS) -fno-rtti  -fno-exceptions
 ASFLAGS = $(CFLAGS)
 
