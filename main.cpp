@@ -12,7 +12,11 @@ PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
 
 //global variables
 float x = 12.5, y = 136;
-bool input = false; 
+bool inputleft = false,
+inputright = false,
+inputup = false,
+inputdown = false,
+input = false; 
 bool dead = false;
 bool finished = false;
 bool wallc = true, finishc = true;
@@ -112,8 +116,13 @@ int finish() {
     }
 }
 int coincollect() {
+    if (!collected) {
     collected = true;
     score+=1000;
+    }
+    else {
+        
+    }
     return 0;
 }
 
@@ -271,49 +280,58 @@ auto main() -> int {
 
                 if (ctrldata.Buttons & PSP_CTRL_UP) {
                     //pspDebugScreenPrintf("up is pressed \n");
-                    if (!input && y > 12.5){
+                    if (!inputup && y > 12.5){
                         y-=15;
                         score-=5;
-                        input = true;
+                        inputup = true;
                     }
                     else {
    
                     }  
                     
                 }
+                else {
+                    inputup = false;
+                }
 
-                else if (ctrldata.Buttons & PSP_CTRL_DOWN) {
+                if (ctrldata.Buttons & PSP_CTRL_DOWN) {
                     //pspDebugScreenPrintf("down is pressed \n");
-                    if (!input && y < 259.5){
+                    if (!inputdown && y < 259.5){
                         y+=15;
                         score-=5;
-                        input = true;
+                        inputdown = true;
                     }
                     else {
 
                     } 
                     
                 }
+                else {
+                    inputdown = false;
+                }
 
-                else if (ctrldata.Buttons & PSP_CTRL_RIGHT) {
+                if (ctrldata.Buttons & PSP_CTRL_RIGHT) {
                     //pspDebugScreenPrintf("right is pressed \n");
-                    if (!input && x < 467.5) {
+                    if (!inputright && x < 467.5) {
                         x+=15;
                         score-=5;
-                        input = true;
+                        inputright = true;
                      }
                      else {
 
                      }
 
                 }
+                else {
+                    inputright = false;
+                }
 
-                else if (ctrldata.Buttons & PSP_CTRL_LEFT) {
+                if (ctrldata.Buttons & PSP_CTRL_LEFT) {
                     //pspDebugScreenPrintf("left is pressed \n");
-                    if (!input && x > 12.5){
+                    if (!inputleft && x > 12.5){
                         x-=15;
                         score-=5;
-                        input = true;
+                        inputleft = true;
                     }
 
                     else {
@@ -322,7 +340,10 @@ auto main() -> int {
                      
                     
                 }
-                else if (ctrldata.Buttons & PSP_CTRL_RTRIGGER && ctrldata.Buttons & PSP_CTRL_SELECT) {
+                else {
+                    inputleft = false;
+                }
+                /*if (ctrldata.Buttons & PSP_CTRL_RTRIGGER && ctrldata.Buttons & PSP_CTRL_SELECT) {
                     //muur collision aan en uit zetten
                     if (!input && wallc) {
                         wallc = false;
@@ -360,7 +381,7 @@ auto main() -> int {
                 else {
                     //als je niks indruk word hier input false. zodat je de knoppen moet klikken en niet in houden
                     input = false;
-                }
+                }*/
                 
                 //draw stuff
                 g2dClear(BLACK);
